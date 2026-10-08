@@ -1,573 +1,1290 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="h-full bg-slate-950 text-slate-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engine Narrativo & Creativo - Propp, Viaggio dell'Eroe & Intùiti</title>
+    <title>Arcana Narrativa - Carte di Propp & Viaggio dell'Eroe</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome per Icone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #475569;
-            --accent-propp: #f59e0b;
-            --accent-hero: #3b82f6;
-            --accent-intuiti-p: #a855f7;
-            --accent-intuiti-s: #10b981;
-            --accent-custom: #ec4899;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', sans-serif;
         }
-
-        header {
-            background-color: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
         }
-
-        .logo-title h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #a855f7, #3b82f6, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo-title p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .app-container {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 1.5rem;
-            padding: 1.5rem 2rem;
-            flex: 1;
-        }
-
-        @media (max-width: 1024px) {
-            .app-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .controls-panel {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .control-group label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-        }
-
-        select, button, input {
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        select:focus, button:focus, input:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-
-        button {
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-        }
-
-        button.btn-primary {
-            background-color: #4f46e5;
-            border-color: #6366f1;
-            color: #ffffff;
-        }
-
-        button.btn-primary:hover {
-            background-color: #4338ca;
-        }
-
-        button.btn-secondary:hover {
-            background-color: var(--bg-card);
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card-container {
+        
+        /* Perspective per l'effetto 3D Flip */
+        .perspective-1000 {
             perspective: 1000px;
-            height: 380px;
         }
-
-        .card {
-            width: 100%;
-            height: 100%;
-            position: relative;
+        
+        .transform-style-3d {
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
         }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+        
+        .backface-hidden {
             backface-visibility: hidden;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            -webkit-backface-visibility: hidden;
         }
-
-        .card-front {
-            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-card));
-            border: 2px dashed var(--border-color);
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .card-front .icon {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-        }
-
-        .card-back {
-            background-color: var(--bg-secondary);
+        
+        .rotate-y-180 {
             transform: rotateY(180deg);
-            overflow-y: auto;
         }
 
-        .badge {
-            align-self: flex-start;
-            font-size: 0.7rem;
-            padding: 0.2rem 0.5rem;
+        /* Gradienti personalizzati */
+        .card-propp-border {
+            border-image: linear-gradient(to bottom right, #a855f7, #3b82f6) 1;
+        }
+        
+        .card-hero-border {
+            border-image: linear-gradient(to bottom right, #f59e0b, #ef4444) 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
             border-radius: 4px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
         }
-
-        .badge-propp { background-color: rgba(245, 158, 11, 0.15); color: var(--accent-propp); border: 1px solid var(--accent-propp); }
-        .badge-hero { background-color: rgba(59, 130, 246, 0.15); color: var(--accent-hero); border: 1px solid var(--accent-hero); }
-        .badge-intuiti_p { background-color: rgba(168, 85, 247, 0.15); color: var(--accent-intuiti-p); border: 1px solid var(--accent-intuiti-p); }
-        .badge-intuiti_s { background-color: rgba(16, 185, 129, 0.15); color: var(--accent-intuiti-s); border: 1px solid var(--accent-intuiti-s); }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-body {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .imperative-text {
-            color: #f1f5f9;
-            font-weight: 600;
-            font-style: italic;
-        }
-
-        .prompt-box {
-            background-color: rgba(15, 23, 42, 0.6);
-            border-left: 3px solid #6366f1;
-            padding: 0.6rem;
-            border-radius: 0 4px 4px 0;
-            font-size: 0.8rem;
-            color: #e2e8f0;
-            margin-top: 0.5rem;
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .notebook-panel {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            flex: 1;
-        }
-
-        .notebook-panel h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        textarea {
-            width: 100%;
-            height: 320px;
-            background-color: var(--bg-primary);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.8rem;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            resize: vertical;
-            outline: none;
-        }
-
-        textarea:focus {
-            border-color: #6366f1;
-        }
-
-        .action-links {
-            display: flex;
-            gap: 0.5rem;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
         }
     </style>
 </head>
-<body>
+<body class="h-full flex flex-col overflow-x-hidden bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950">
 
-    <header>
-        <div class="logo-title">
-            <h1>Engine Narrativo & Creativo</h1>
-            <p>Propp (31) • Viaggio dell'Eroe (12) • Intùiti (78)</p>
+    <!-- Header/Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-purple-600 flex items-center justify-center shadow-lg shadow-amber-500/10">
+                    <i class="fa-solid fa-scroll text-slate-950 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-cinzel text-lg sm:text-xl font-bold tracking-wider text-amber-100">ARCANA NARRATIVA</h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">Laboratorio di Struttura Narrativa & Spunti Creativi</p>
+                </div>
+            </div>
+
+            <!-- Pulsanti Navigazione / Modalità -->
+            <div class="flex items-center gap-2">
+                <button id="btn-tab-draw" onclick="switchTab('draw')" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg bg-amber-500 text-slate-950 hover:bg-amber-400 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-cards"></i>
+                    <span>Tavolo da Gioco</span>
+                </button>
+                <button id="btn-tab-browse" onclick="switchTab('browse')" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span class="hidden sm:inline">Enciclopedia Carte</span>
+                </button>
+                <button id="btn-tab-notebook" onclick="toggleNotebook()" class="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1.5 relative">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                    <span class="hidden sm:inline">Taccuino</span>
+                    <span id="notebook-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-500 rounded-full"></span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="app-container">
-        <section class="main-content">
-            <div class="controls-panel">
-                <div class="control-group">
-                    <label for="deckSelect">Mazzo</label>
-                    <select id="deckSelect">
-                        <option value="all">Tutti i Mazzi (121 Carte)</option>
-                        <option value="propp">Funzioni di Propp (31)</option>
-                        <option value="hero">Viaggio dell'Eroe (12)</option>
-                        <option value="intuiti">Intùiti Complete (78)</option>
-                        <option value="intuiti_p">Intùiti Primari (22)</option>
-                        <option value="intuiti_s">Intùiti Secondari (56)</option>
-                    </select>
-                </div>
+    <!-- Main Container -->
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
 
-                <div class="control-group">
-                    <label for="countSelect">Estrazione</label>
-                    <select id="countSelect">
-                        <option value="1">1 Carta (Spunto Rapido)</option>
-                        <option value="3">3 Carte (Inizio / Svolta / Fine)</option>
-                        <option value="4">4 Carte (Struttura in 4 Atti)</option>
-                        <option value="5">5 Carte (Percorso Completo)</option>
-                    </select>
-                </div>
+        <!-- Pannello di Controllo Sinistro (Filtri e Opzioni Estrazione) -->
+        <aside id="main-sidebar" class="w-full lg:w-80 shrink-0 space-y-6">
+            
+            <!-- Selezione Mazzo -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                <h2 class="font-cinzel text-sm font-semibold text-amber-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group"></i> Selezione Mazzo
+                </h2>
+                
+                <div class="space-y-2">
+                    <label class="flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950/50 hover:border-amber-500/50 cursor-pointer transition-all">
+                        <input type="radio" name="deck-type" value="all" checked onchange="updateDeckSelection()" class="w-4 h-4 text-amber-500 bg-slate-900 border-slate-700 focus:ring-amber-500 focus:ring-offset-slate-900">
+                        <div class="ml-3">
+                            <span class="block text-sm font-medium text-slate-200">Mazzo Combinato</span>
+                            <span class="block text-xs text-slate-500">Propp + Viaggio dell'Eroe (<span id="count-all">0</span> carte)</span>
+                        </div>
+                    </label>
 
-                <button class="btn-primary" onclick="drawCards()">
-                    <span>🎴</span> Estrai Carte
-                </button>
-                <button class="btn-secondary" onclick="flipAll()">
-                    <span>🔄</span> Gira Tutte
-                </button>
+                    <label class="flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950/50 hover:border-purple-500/50 cursor-pointer transition-all">
+                        <input type="radio" name="deck-type" value="propp" onchange="updateDeckSelection()" class="w-4 h-4 text-purple-500 bg-slate-900 border-slate-700 focus:ring-purple-500 focus:ring-offset-slate-900">
+                        <div class="ml-3">
+                            <span class="block text-sm font-medium text-slate-200">Funzioni di Propp</span>
+                            <span class="block text-xs text-slate-500">31 Strutture della Fiaba (<span id="count-propp">0</span>)</span>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center p-3 rounded-xl border border-slate-800 bg-slate-950/50 hover:border-amber-500/50 cursor-pointer transition-all">
+                        <input type="radio" name="deck-type" value="hero" onchange="updateDeckSelection()" class="w-4 h-4 text-amber-500 bg-slate-900 border-slate-700 focus:ring-amber-500 focus:ring-offset-slate-900">
+                        <div class="ml-3">
+                            <span class="block text-sm font-medium text-slate-200">Viaggio dell'Eroe</span>
+                            <span class="block text-xs text-slate-500">12 Fasi Vogler/Campbell (<span id="count-hero">0</span>)</span>
+                        </div>
+                    </label>
+                </div>
             </div>
 
-            <div class="grid-cards" id="cardsGrid"></div>
-        </section>
+            <!-- Modalità di Estrazione -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                <h2 class="font-cinzel text-sm font-semibold text-amber-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Modalità di Estrazione
+                </h2>
 
-        <aside class="sidebar">
-            <div class="notebook-panel">
-                <h2>Taccuino dello Scrittore</h2>
-                <textarea id="notes" placeholder="Scrivi qui i tuoi appunti, la trama o le riflessioni generate dalle carte estratte..."></textarea>
-                <div class="action-links">
-                    <button class="btn-secondary" style="width: 100%;" onclick="copyNotes()">Copia Testo</button>
-                    <button class="btn-secondary" style="width: 100%;" onclick="clearNotes()">Pulisci</button>
+                <div class="space-y-3">
+                    <button onclick="drawCards('single')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all group flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-slate-200 group-hover:text-amber-300">Carta Singola</div>
+                            <div class="text-xs text-slate-500">Spunto rapido per blocco dello scrittore</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-amber-400 text-xs transition-transform group-hover:translate-x-1"></i>
+                    </button>
+
+                    <button onclick="drawCards('trio')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all group flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-slate-200 group-hover:text-amber-300">Trittico Narrativo (3)</div>
+                            <div class="text-xs text-slate-500">Inizio &bull; Svolta &bull; Risoluzione</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-amber-400 text-xs transition-transform group-hover:translate-x-1"></i>
+                    </button>
+
+                    <button onclick="drawCards('structured')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all group flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-slate-200 group-hover:text-amber-300">Percorso Completo (4)</div>
+                            <div class="text-xs text-slate-500">Mondo &bull; Sfida &bull; Climax &bull; Epilogo</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-amber-400 text-xs transition-transform group-hover:translate-x-1"></i>
+                    </button>
+
+                    <button onclick="drawCards('five')" class="w-full text-left p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all group flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-medium text-slate-200 group-hover:text-amber-300">Estrazione Quinta (5)</div>
+                            <div class="text-xs text-slate-500">5 carte per intrecci complessi</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 group-hover:text-amber-400 text-xs transition-transform group-hover:translate-x-1"></i>
+                    </button>
                 </div>
+
+                <div class="mt-5 pt-4 border-t border-slate-800 flex gap-2">
+                    <button onclick="flipAllCards(true)" class="flex-1 py-2 px-3 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-eye"></i> Rvela Tutto
+                    </button>
+                    <button onclick="flipAllCards(false)" class="flex-1 py-2 px-3 text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-eye-slash"></i> Copri Tutto
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gestione Mazzo & JSON -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+                <h2 class="font-cinzel text-sm font-semibold text-amber-400 tracking-wider uppercase mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> Strumenti & JSON
+                </h2>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="openModal('add-card-modal')" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-amber-300 rounded-xl transition-colors flex flex-col items-center justify-center gap-1 border border-amber-500/20">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span>Crea Carta</span>
+                    </button>
+                    <button onclick="exportJSON()" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 rounded-xl transition-colors flex flex-col items-center justify-center gap-1 border border-slate-700">
+                        <i class="fa-solid fa-download text-sm"></i>
+                        <span>Esporta JSON</span>
+                    </button>
+                </div>
+
+                <label class="w-full p-2.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 rounded-xl transition-colors flex items-center justify-center gap-2 border border-slate-700 cursor-pointer">
+                    <i class="fa-solid fa-upload"></i>
+                    <span>Importa JSON Personalizzato</span>
+                    <input type="file" id="import-file" accept=".json" onchange="importJSON(event)" class="hidden">
+                </label>
+                
+                <button onclick="resetDefaultDeck()" class="w-full py-1.5 text-[11px] text-slate-500 hover:text-red-400 transition-colors text-center block">
+                    Ripristina Mazzi di Default
+                </button>
             </div>
         </aside>
+
+        <!-- Area Centrale (Tavolo di Gioco / Vista Carte / Enciclopedia) -->
+        <main class="flex-1 flex flex-col space-y-6 min-w-0">
+            
+            <!-- Vista 1: Tavolo da Gioco (Carte Estratte) -->
+            <section id="view-draw" class="flex-1 flex flex-col">
+                <div class="flex items-center justify-between mb-4 bg-slate-900/60 backdrop-blur p-4 rounded-2xl border border-slate-800">
+                    <div>
+                        <h2 id="draw-title" class="font-cinzel text-lg font-bold text-amber-200">Tavolo delle Carte</h2>
+                        <p id="draw-subtitle" class="text-xs text-slate-400">Clicca sul pulsante di estrazione a sinistra per iniziare.</p>
+                    </div>
+                    <span id="drawn-count-badge" class="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium rounded-full">
+                        0 carte stese
+                    </span>
+                </div>
+
+                <!-- Griglia Carte Estratte -->
+                <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 flex-1 min-h-[400px] items-start">
+                    <!-- Placeholder quando non ci sono carte -->
+                    <div id="cards-empty-state" class="col-span-full h-80 border-2 border-dashed border-slate-800 rounded-3xl flex flex-col items-center justify-center text-center p-6 text-slate-600 space-y-3">
+                        <div class="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-slate-700 text-2xl">
+                            <i class="fa-solid fa-dice-d20"></i>
+                        </div>
+                        <p class="text-sm max-w-sm text-slate-400">Nessuna carta sul tavolo. Seleziona un tipo di estrazione dal pannello laterale per cominciare a plasmare la tua storia.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vista 2: Enciclopedia / Consultazione Mazzo -->
+            <section id="view-browse" class="hidden flex-1 flex flex-col space-y-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    <div class="relative w-full sm:w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                        <input type="text" id="browse-search" oninput="renderEncyclopedia()" placeholder="Cerca carta, archetipo..." class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500">
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+                        <button onclick="filterEncyclopedia('all')" class="enc-filter-btn px-3 py-1.5 text-xs rounded-lg bg-amber-500 text-slate-950 font-semibold" data-category="all">Tutti</button>
+                        <button onclick="filterEncyclopedia('propp')" class="enc-filter-btn px-3 py-1.5 text-xs rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium" data-category="propp">Propp</button>
+                        <button onclick="filterEncyclopedia('hero')" class="enc-filter-btn px-3 py-1.5 text-xs rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium" data-category="hero">Viaggio Eroe</button>
+                    </div>
+                </div>
+
+                <div id="encyclopedia-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <!-- Popolato via JS -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Drawer / Pannello Taccuino dello Scrittore -->
+        <aside id="notebook-drawer" class="fixed right-0 top-0 bottom-0 w-full sm:w-96 bg-slate-900 border-l border-slate-800 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950">
+                <div class="flex items-center gap-2 text-amber-400 font-cinzel font-semibold text-sm">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                    <span>Taccuino dello Scrittore</span>
+                </div>
+                <button onclick="toggleNotebook()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-4 flex-1 flex flex-col space-y-4 overflow-y-auto">
+                <div class="text-xs text-slate-400 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                    Utilizza questo spazio per appuntare le tue idee narrative man mano che estrai le carte.
+                </div>
+
+                <div class="flex-1 flex flex-col space-y-2">
+                    <label class="text-xs font-medium text-slate-300">Titolo del Progetto / Storia</label>
+                    <input type="text" id="story-title" placeholder="Es. La Spada del Destino..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-500">
+
+                    <label class="text-xs font-medium text-slate-300 mt-2">Bozza & Appunti</label>
+                    <textarea id="story-content" placeholder="Inizia a scrivere la tua trama qui..." class="flex-1 w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-amber-500 resize-none min-h-[250px] font-mono text-xs leading-relaxed"></textarea>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-800 bg-slate-950 flex gap-2">
+                <button onclick="saveNotebookStory()" class="flex-1 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold rounded-xl transition-colors">
+                    Salva Locale
+                </button>
+                <button onclick="downloadStoryTxt()" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-xl transition-colors">
+                    <i class="fa-solid fa-download"></i> .txt
+                </button>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Modal: Aggiungi Carta Personalizzata -->
+    <div id="add-card-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 space-y-4 shadow-2xl relative">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="font-cinzel text-amber-400 font-semibold text-lg">Crea Nuova Carta</h3>
+                <button onclick="closeModal('add-card-modal')" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="custom-card-form" onsubmit="handleCreateCard(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">Mazzo Appartenenza</label>
+                    <select id="card-deck-type" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                        <option value="propp">Funzione di Propp</option>
+                        <option value="hero">Viaggio dell'Eroe</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">Titolo Carta</label>
+                    <input type="text" id="card-title" required placeholder="Es. L'Oggetto Magico Inaspettato" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Categoria / Fase</label>
+                        <input type="text" id="card-category" required placeholder="Es. Iniziazione" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-300 mb-1">Archetipo Associato</label>
+                        <input type="text" id="card-archetype" placeholder="Es. Il Donatore / Mentore" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">Descrizione Funzione Narrativa</label>
+                    <textarea id="card-desc" required rows="2" placeholder="Spiega cosa accade nella trama..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:border-amber-500 outline-none resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">Spunto di Scrittura (Prompt)</label>
+                    <textarea id="card-prompt" rows="2" placeholder="Domande guida per lo scrittore..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:border-amber-500 outline-none resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">Esempio Celebre</label>
+                    <input type="text" id="card-example" placeholder="Es. Yoda regala la spada a Luke in Star Wars" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                </div>
+
+                <div class="pt-3 border-t border-slate-800 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('add-card-modal')" class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white">Annulla</button>
+                    <button type="submit" class="px-5 py-2 text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl transition-colors">Salva Carta</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
-        const cardsDatabase = [
-            // --- FUNZIONI DI PROPP (31) ---
-            ...[
-                ["Allontanamento", "Un membro della famiglia si allontana da casa.", "Chi abbandona il nucleo sicuro e per quale motivo?"],
-                ["Divieto", "All'eroe viene imposto un divieto o un ordine.", "Quale limite invalicabile viene stabilito?"],
-                ["Infrazione", "Il divieto viene infranto.", "Chi cede alla tentazione o alla necessità di trasgredire?"],
-                ["Investigazione", "L'antagonista tenta una ricognizione.", "Come cerca informazioni il nemico?"],
-                ["Delazione", "L'antagonista riceve informazioni sulla vittima.", "Quale soffia o tradimento svela il punto debole?"],
-                ["Ingannevolezza", "L'antagonista tenta di ingannare la vittima per impossessarsi di lei.", "Quale trappola o travestimento viene usato?"],
-                ["Complicità", "La vittima cade nell'inganno e aiuta involontariamente il nemico.", "In che modo l'eroe casca nella rete?"],
-                ["Danneggiamento / Mancanza", "L'antagonista reca danno o all'eroe manca qualcosa di essenziale.", "Quale rottura dell'equilibrio dà inizio all'azione?"],
-                ["Mediazione", "La sventura o mancanza viene resa nota; l'eroe riceve una chiamata.", "Chi chiede aiuto o rivela la missione?"],
-                ["Consenso del Reagente", "L'eroe sceglie di agire e accettare la missione.", "Qual è la motivazione interna che lo spinge ad andare?"],
-                ["Partenza", "L'eroe abbandona la casa o il contesto noto.", "Qual è il primo passo verso l'ignoto?"],
-                ["Prima Funzione del Donatore", "L'eroe viene messo alla prova in vista di un dono.", "Quale incontro saggia il suo valore?"],
-                ["Reazione dell'Eroe", "L'eroe supera (o fallisce) la prova del Donatore.", "In che modo dimostra la sua virtù o arguzia?"],
-                ["Fornitura dell'Oggetto Magico", "L'eroe entra in possesso del mezzo o alleato magico.", "Quale strumento speciale gli viene affidato?"],
-                ["Trasferimento nello Spazio", "L'eroe condotto sul luogo dove si trova l'oggetto della ricerca.", "Come raggiunge la soglia del pericolo?"],
-                ["Lotta", "L'eroe e l'antagonista si affrontano direttamente.", "Qual è il primo scontro diretto?"],
-                ["Marchiatura", "All'eroe viene impresso un marchio o ferita.", "Quale segno fisico o emotivo resta sull'eroe?"],
-                ["Vittoria", "L'antagonista viene sconfitto.", "Come viene superato temporaneamente l'ostacolo?"],
-                ["Rifornimento", "La mancanza iniziale viene colmata.", "Cosa viene recuperato o risanato?"],
-                ["Ritorno", "L'eroe intraprende il cammino di ritorno.", "Come comincia il viaggio verso casa?"],
-                ["Inseguimento", "L'eroe viene inseguito da forze ostili.", "Quale nuova minaccia incalza alle spalle?"],
-                ["Salvataggio", "L'eroe si salva dall'inseguimento.", "Quale rifugio o espediente evita il disastro?"],
-                ["Arrivo Incognito", "L'eroe arriva in patria o in un nuovo luogo senza farsi riconoscere.", "Perché deve nascondere la sua identità?"],
-                ["Pretese Ingiustificate", "Un falso eroe avanza pretese sul merito dell'impresa.", "Chi cerca di appropriarsi dei risultati dell'eroe?"],
-                ["Compito Difficile", "All'eroe viene proposta una prova complessa.", "Qual è l'enigma o l'impresa finale da compiere?"],
-                ["Esecuzione del Compito", "Il compito difficile viene eseguito.", "Come risolve la prova finale?"],
-                ["Riconoscimento", "L'eroe viene riconosciuto.", "Come viene rivelata la verità su di lui?"],
-                ["Mascheramento / Svelamento", "Il falso eroe o l'antagonista viene smascherato.", "Quale prova inconfutabile smaschera l'inganno?"],
-                ["Punizione", "L'antagonista viene punito o neutralizzato.", "Qual è la giusta conseguenza per il colpevole?"],
-                ["Nozze / Incoronazione", "L'eroe si sposa, sale al trono o ottiene la ricompensa suprema.", "Qual è il nuovo stato di equilibrio e trionfo?"]
-            ].map((f, i) => ({
-                id: `propp_${i+1}`,
+        // DATASET BASE: Carte di Propp (31) e Viaggio dell'Eroe (12)
+        const DEFAULT_PROPP_CARDS = [
+            {
+                id: "propp_1",
                 deck: "propp",
-                type: "Funzione di Propp",
-                title: `${i+1}. ${f[0]}`,
-                desc: f[1],
-                prompt: f[2]
-            })),
-
-            // --- VIAGGIO DELL'EROE (12) ---
-            ...[
-                ["Mondo Ordinario", "L'eroe nel suo ambiente quotidiano prima del cambiamento.", "Mostra i limiti e i desideri inespressi nel contesto abituale."],
-                ["Chiamata all'Avventura", "Un evento o messaggero rompe la routine e stabilisce la sfida.", "Cosa scombussola la stabilità del protagonista?"],
-                ["Rifiuto della Chiamata", "L'eroe esita, spaventato dal rischio o dal cambiamento.", "Quale paura frena il primo passo?"],
-                ["Incontro con il Mentore", "Una guida fornisce consigli, addestramento o strumenti.", "Chi trasmette la saggezza o l'impulso necessario?"],
-                ["Varco della Prima Soglia", "L'eroe entra definitivamente nel Mondo Straordinario.", "Qual è il punto di non ritorno?"],
-                ["Prove, Alleati, Nemici", "L'eroe impara le regole del nuovo mondo e stringe legami.", "Chi sta dalla sua parte e chi ne ostacola il cammino?"],
-                ["Avvicinamento alla Caverna Più Profonda", "Preparazione alla sfida principale nel cuore del pericolo.", "Come ci si prepara ad affrontare la paura più grande?"],
-                ["Ordata (Prova Centrale)", "La crisi centrale in cui l'eroe affronta la morte o la sua ombra.", "Quale sacrificio o trasformazione viscerale avviene qui?"],
-                ["La Ricompensa (Spada)", "L'eroe conquista l'oggetto, la conoscenza o la forza cercata.", "Cosa si ottiene dopo essere sopravvissuti all'oscurità?"],
-                ["Sulla Via del Ritorno", "La necessità di completare il viaggio e riportare il tesoro.", "Quale urgenza o minaccia residua spinge a tornare?"],
-                ["Resurrezione", "La prova finale purificatrice dove l'eroe applica quanto appreso.", "In che modo dimostra di essere un'altra persona?"],
-                ["Ritorno con l'Elisir", "Ritorno al mondo ordinario con una conquista da condividere.", "Qual è il dono portatore di guarigione o cambiamento?"]
-            ].map((h, i) => ({
-                id: `hero_${i+1}`,
-                deck: "hero",
-                type: "Viaggio dell'Eroe",
-                title: `${i+1}. ${h[0]}`,
-                desc: h[1],
-                prompt: h[2]
-            })),
-
-            // --- INTÙITI PRIMARI (22) ---
-            ...[
-                ["01 - Visione d'Insieme", "Guarda l'intero quadro.", "Stai osservando il dettaglio sacrificando l'insieme?"],
-                ["02 - L'Origine", "Torna all'idea primaria.", "Qual era l'intenzione pura prima delle sovrastrutture?"],
-                ["03 - La Trasformazione", "Accetta la mutazione.", "Cosa deve morire perché l'idea si evolva?"],
-                ["04 - Il Limite", "Usa il vincolo come risorsa.", "In che modo questo ostacolo definisce la forma?"],
-                ["05 - Il Ritmo", "Trova la cadenza dell'azione.", "Stai affrettando i tempi o rimandando la decisione?"],
-                ["06 - L'Equilibrio", "Pesa le componenti opposte.", "Cosa c'è di troppo e cosa manca?"],
-                ["07 - La Rottura", "Spezza lo schema consolidato.", "Qual è la scelta più sconvolgente che puoi fare?"],
-                ["08 - Il Vuoto", "Lascia spazio al non detto.", "Cosa succede se sottrai invece di aggiungere?"],
-                ["09 - La Tensione", "Alimenta il conflitto interno.", "Cosa tiene due forze in opposto contrasto?"],
-                ["10 - La Sintesi", "Unisci due elementi distanti.", "Quale cortocircuito crea l'unione di A e B?"],
-                ["11 - La Maschera", "Lavora sull'apparenza.", "Cosa si nasconde sotto ciò che viene mostrato?"],
-                ["12 - Il Flusso", "Aseconda l'evoluzione naturale.", "Dove sta andando la storia senza la tua forzatura?"],
-                ["13 - Il Centro", "Focalizzati sul cuore del tema.", "Qual è la vera domanda fondamentale di questa trama?"],
-                ["14 - L'Ombra", "Esplora il lato sgradevole.", "Qual è la verità spiacevole che stai evitando?"],
-                ["15 - Il Riflesso", "Usa specchi e parallelismi.", "In che modo l'ambiente riflette lo stato interno?"],
-                ["16 - La Svolta", "Inverti completamente la rotta.", "Se succedesse l'esatto contrario di ciò che ti aspetti?"],
-                ["17 - La Trasparenza", "Rendi tutto esplicito e grezzo.", "Cosa succede se elimini le metafore?"],
-                ["18 - L'Impronta", "Lascia un segno incisivo.", "Qual è l'elemento indimenticabile di questa scena?"],
-                ["19 - Il Nido", "Crea un rifugio di sicurezza.", "Dove riprendono fiato le forze in campo?"],
-                ["20 - La Scintilla", "Cerca l'intuizione istintiva.", "Qual è il primo pensiero irrazionale che ti viene?"],
-                ["21 - L'Orizzonte", "Guarda le conseguenze a lungo termine.", "Dove porta questo passaggio fra tre capitoli?"],
-                ["22 - Il Silenzio", "Pausa strategica e ascolto.", "Lascia che i fatti decantino."]
-            ].map((ip, i) => ({
-                id: `int_p_${i+1}`,
-                deck: "intuiti_p",
-                type: "Intùiti Primario",
-                title: ip[0],
-                desc: "Archetipo e modello di pensiero per lo sblocco creativo.",
-                imperative: ip[1],
-                prompt: ip[2]
-            })),
-
-            // --- INTÙITI SECONDARI (56: 14 Fuoco, 14 Aria, 14 Acqua, 14 Terra) ---
-            ...[
-                // Fuoco
-                ...Array.from({length: 14}, (_, i) => ({
-                    elem: "Fuoco (Energia/Azione)",
-                    num: i+1,
-                    imp: ["Agisci d'impulso.", "Innesca una reazione.", "Aumenta la velocità.", "Brucia i ponti.", "Mostra passione.", "Genera scontro.", "Lancia una sfida.", "Distruggi un vincolo.", "Prendi l'iniziativa.", "Fai esplodere la scena.", "Usa la forza viscerale.", "Insegui il desiderio.", "Lancia il guanto.", "Consuma le riserve."][i],
-                    prm: "Come puoi portare immediatezza energetica e dinamismo immediato?"
-                })),
-                // Aria
-                ...Array.from({length: 14}, (_, i) => ({
-                    elem: "Aria (Intelletto/Visione)",
-                    num: i+1,
-                    imp: ["Analizza la struttura.", "Semplifica la logica.", "Cambia prospettiva teorica.", "Riformula il problema.", "Pianifica la strategia.", "Trova il paradosso.", "Scrivi con distacco.", "Usa l'ironia.", "Chiarezza concettuale.", "Decodifica il messaggio.", "Metti in discussione la tesi.", "Astrai dal contesto.", "Trova il nesso.", "Sviscera il senso."][i],
-                    prm: "Quale riflessione o riorganizzazione razionale chiarisce il quadro?"
-                })),
-                // Acqua
-                ...Array.from({length: 14}, (_, i) => ({
-                    elem: "Acqua (Emozione/Relazione)",
-                    num: i+1,
-                    imp: ["Ascolta l'empatia.", "Scava nella ferita.", "Svela la vulnerabilità.", "Lavora sulle sfumature.", "Crea intimità.", "Mostra la paura.", "Usa la nostalgia.", "Connetti i personaggi.", "Esaudisci un bisogno emotivo.", "Accetta il dolore.", "Esprimi il non detto.", "Sciogli la resistenza.", "Lasciati trasportare.", "Mostra l'inconscio."][i],
-                    prm: "Qual è l'impatto emotivo profondo che attraversa la situazione?"
-                })),
-                // Terra
-                ...Array.from({length: 14}, (_, i) => ({
-                    elem: "Terra (Materia/Pragmatismo)",
-                    num: i+1,
-                    imp: ["Rendi tutto concreto.", "Usa i cinque sensi.", "Radica la scena nei dettagli.", "Considera le risorse fisiche.", "Fissa regole chiare.", "Pensa alle conseguenze pratiche.", "Lavora sulla materia.", "Misura i costi.", "Consolida la base.", "Dai corpo ai personaggi.", "Costruisci il mondo fisico.", "Tocca con mano.", "Definisci i tempi reali.", "Lavora sulla resistenza."][i],
-                    prm: "Quale dettaglio sensoriale o vincolo materiale rende la storia credibile?"
-                }))
-            ].map((is, i) => ({
-                id: `int_s_${i+1}`,
-                deck: "intuiti_s",
-                type: `Intùiti ${is.elem.split(' ')[0]}`,
-                title: `${is.elem.split(' ')[0]} ${is.num}`,
-                desc: `Stimolo operativo incentrato su ${is.elem}.`,
-                imperative: is.imp,
-                prompt: is.prm
-            }))
+                code: "I",
+                title: "Allontanamento",
+                category: "Preparazione",
+                archetype: "Eroe / Famiglia",
+                description: "Un membro della famiglia o della comunità si allontana da casa per motivi di lavoro, guerra o necessità.",
+                prompt: "Cosa spinge il protagonista ad allontanarsi dal suo ambiente protetto?",
+                example: "Luke Skywalker lascia la fattoria dello zio dopo l'attacco dei Trooper."
+            },
+            {
+                id: "propp_2",
+                deck: "propp",
+                code: "II",
+                title: "Divieto / Ordine",
+                category: "Preparazione",
+                archetype: "Autorità / Mentore",
+                description: "All'eroe viene imposto un divieto ('Non entrare in quella stanza') o un ordine preciso.",
+                prompt: "Quale regola o avvertimento viene dato al protagonista?",
+                example: "Non mangiare la mela avvelenata / Non superare la foresta oscura."
+            },
+            {
+                id: "propp_3",
+                deck: "propp",
+                code: "III",
+                title: "Infrangimento del Divieto",
+                category: "Preparazione",
+                archetype: "Antagonista / Eroe",
+                description: "Il divieto viene infranto. Questo permette all'antagonista di entrare in gioco.",
+                prompt: "Cosa spinge il protagonista a cedere alla tentazione e infrangere la regola?",
+                example: "Pandora apre il vaso proibito."
+            },
+            {
+                id: "propp_4",
+                deck: "propp",
+                code: "IV",
+                title: "Investigazione",
+                category: "Preparazione",
+                archetype: "Antagonista",
+                description: "L'antagonista cerca di raccogliere informazioni sull'eroe o sulla sua vittima.",
+                prompt: "In che modo la minaccia sta studiando i punti deboli del protagonista?",
+                example: "Sauron cerca l'Anello Unico interrogando Gollum."
+            },
+            {
+                id: "propp_5",
+                deck: "propp",
+                code: "V",
+                title: "Delazione",
+                category: "Preparazione",
+                archetype: "Spia / Informatore",
+                description: "L'antagonista ottiene informazioni utili sulla sua vittima, spesso tramite un inganno.",
+                prompt: "Chi rivela per errore o tradimento il segreto dell'eroe?",
+                example: "Un servo spaventato rivela il nascondiglio della principessa."
+            },
+            {
+                id: "propp_6",
+                deck: "propp",
+                code: "VI",
+                title: "Inganno",
+                category: "Preparazione",
+                archetype: "Impostore / Antagonista",
+                description: "L'antagonista cerca di ingannare la vittima per impadronirsi di lei o dei suoi beni.",
+                prompt: "Quale travestimento o falsa promessa usa il nemico?",
+                example: "La Strega Cattiva travestita da vecchia con le mele."
+            },
+            {
+                id: "propp_7",
+                deck: "propp",
+                code: "VII",
+                title: "Complicità",
+                category: "Preparazione",
+                archetype: "Vittima",
+                description: "La vittima cede all'inganno e aiuta involontariamente il nemico.",
+                prompt: "In che modo l'innocenza o la disperazione del personaggio lo rende vulnerabile?",
+                example: "Cappuccetto Rosso rivela al Lupo dove sta andando."
+            },
+            {
+                id: "propp_8",
+                deck: "propp",
+                code: "VIII",
+                title: "Danneggiamento / Mancanza",
+                category: "Iniziazione",
+                archetype: "Antagonista",
+                description: "L'antagonista reca danno a un membro della famiglia oppure ad uno dei personaggi manca qualcosa di vitale.",
+                prompt: "Quale perdita dolorosa mette in moto l'intera storia?",
+                example: "Il rapimento della principessa / La perdita dell'elisir di lunga vita."
+            },
+            {
+                id: "propp_9",
+                deck: "propp",
+                code: "IX",
+                title: "Mediazione / Chiamata",
+                category: "Iniziazione",
+                archetype: "Messaggero",
+                description: "La notizia della mancanza si diffonde. All'eroe viene rivolta una richiesta di aiuto.",
+                prompt: "Come viene a conoscenza del problema il protagonista?",
+                example: "Il messaggio olografico della Principessa Leia inviato tramite R2-D2."
+            },
+            {
+                id: "propp_10",
+                deck: "propp",
+                code: "X",
+                title: "Consenso dell'Eroe",
+                category: "Iniziazione",
+                archetype: "Eroe",
+                description: "L'eroe acconsente o decide di reagire per colmare la mancanza o riparare il danno.",
+                prompt: "Cosa convince definitivamente l'eroe ad accettare la missione?",
+                example: "Frodo accetta di portare l'Anello fino al Monte Fato."
+            },
+            {
+                id: "propp_11",
+                deck: "propp",
+                code: "XI",
+                title: "Partenza dell'Eroe",
+                category: "Iniziazione",
+                archetype: "Eroe",
+                description: "L'eroe abbandona la propria casa o il mondo conosciuto per intraprendere il viaggio.",
+                prompt: "Qual è il punto di non ritorno fisico o psicologico?",
+                example: "La compagnia parte da Gran Burrone."
+            },
+            {
+                id: "propp_12",
+                deck: "propp",
+                code: "XII",
+                title: "Messa alla Prova del Donatore",
+                category: "Lotta / Transizione",
+                archetype: "Donatore / Saggio",
+                description: "L'eroe viene messo alla prova da un personaggio misterioso prima di ricevere un aiuto.",
+                prompt: "Quale test di valore, morale o intelligenza deve superare l'eroe?",
+                example: "La prova d'ingegno o la risposto al quesito della Sfinge."
+            },
+            {
+                id: "propp_13",
+                deck: "propp",
+                code: "XIII",
+                title: "Reazione dell'Eroe",
+                category: "Lotta / Transizione",
+                archetype: "Eroe",
+                description: "L'eroe reagisce alle azioni del futuro Donatore (supera la prova, mostra compassione o astuzia).",
+                prompt: "Quale virtù dimostra il protagonista durante il test?",
+                example: "Condividere il cibo con una vecchia mendicante che si rivela una fata."
+            },
+            {
+                id: "propp_14",
+                deck: "propp",
+                code: "XIV",
+                title: "Fornitura dell'Oggetto Magico",
+                category: "Lotta / Transizione",
+                archetype: "Donatore",
+                description: "L'oggetto magico o il potente risorsa viene consegnato nelle mani dell'eroe.",
+                prompt: "Quale strumento speciale, arma o potere acquisisce l'eroe?",
+                example: "Excalibur consegnata dalla Dama del Lago."
+            },
+            {
+                id: "propp_15",
+                deck: "propp",
+                code: "XV",
+                title: "Trasferimento nello Spazio",
+                category: "Lotta / Transizione",
+                archetype: "Guida",
+                description: "L'eroe viene condotto vicino al luogo in cui si trova l'oggetto della sua ricerca o il nemico.",
+                prompt: "Attraverso quale mezzo orrido o straordinario si sposta l'eroe?",
+                example: "Volo a dorso di un drago o viaggio iperdello spazio."
+            },
+            {
+                id: "propp_16",
+                deck: "propp",
+                code: "XVI",
+                title: "Lotta Diretta",
+                category: "Lotta / Transizione",
+                archetype: "Eroe vs Antagonista",
+                description: "L'eroe e l'antagonista si affrontano direttamente in uno scontro.",
+                prompt: "Come si sviluppa il primo vero duello fisico o mentale?",
+                example: "Lo scontro con il Minotauro nel Labirinto."
+            },
+            {
+                id: "propp_17",
+                deck: "propp",
+                code: "XVII",
+                title: "Marchiatura",
+                category: "Lotta / Transizione",
+                archetype: "Eroe",
+                description: "L'eroe riceve un marchio, una ferita, un anello o un segno distintivo.",
+                prompt: "Quale cicatrice permanente o simbolo di distinzione riceve il protagonista?",
+                example: "La cicatrice a forma di saetta di Harry Potter."
+            },
+            {
+                id: "propp_18",
+                deck: "propp",
+                code: "XVIII",
+                title: "Vittoria sull'Antagonista",
+                category: "Lotta / Transizione",
+                archetype: "Eroe",
+                description: "L'antagonista viene sconfitto, scacciato o ucciso.",
+                prompt: "Come riesce l'eroe a volgere lo scontro a proprio favore?",
+                example: "Far cadere il gigante facendo leva sulla sua vanità."
+            },
+            {
+                id: "propp_19",
+                deck: "propp",
+                code: "XIX",
+                title: "Riparazione del Danno",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe",
+                description: "Il danno iniziale viene riparato o la mancanza colmata.",
+                prompt: "In che modo l'equilibrio originale viene finalmente ripristinato?",
+                example: "La principessa viene risvegliata dal bacio o il tesoro recuperato."
+            },
+            {
+                id: "propp_20",
+                deck: "propp",
+                code: "XX",
+                title: "Ritorno dell'Eroe",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe",
+                description: "L'eroe intraprende la strada verso casa.",
+                prompt: "Quali sentimenti prova il protagonista nel rientrare nel suo mondo?",
+                example: "Il viaggio di ritorno degli Hobbit verso la Contea."
+            },
+            {
+                id: "propp_21",
+                deck: "propp",
+                code: "XXI",
+                title: "Inseguimento",
+                category: "Ritorno / Risoluzione",
+                archetype: "Antagonista / Alleati del nemico",
+                description: "L'eroe viene inseguito da forze nemiche durante il ritorno.",
+                prompt: "Chi ostacola la fuga del protagonista quando tutto sembrava risolto?",
+                example: "L'inseguimento dei Nazgûl al guado di Bruinen."
+            },
+            {
+                id: "propp_22",
+                deck: "propp",
+                code: "XXII",
+                title: "Salvataggio",
+                category: "Ritorno / Risoluzione",
+                archetype: "Alleato",
+                description: "L'eroe si salva dall'inseguimento grazie a un aiuto inaspettato o un tranello.",
+                prompt: "Quale risorsa dell'ultimo secondo salva l'eroe dal pericolo imminente?",
+                example: "Le aquile giganti che salvano Frodo e Sam."
+            },
+            {
+                id: "propp_23",
+                deck: "propp",
+                code: "XXIII",
+                title: "Arrivo Incognito",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe in incognito",
+                description: "L'eroe torna a casa o giunge in un altro paese senza farsi riconoscere.",
+                prompt: "Perché l'eroe deve nascondere la propria identità al suo rientro?",
+                example: "Ulisse che torna ad Itaca travestito da mendicante."
+            },
+            {
+                id: "propp_24",
+                deck: "propp",
+                code: "XXIV",
+                title: "Pretese del Falso Eroe",
+                category: "Ritorno / Risoluzione",
+                archetype: "Falso Eroe",
+                description: "Un falso eroe accampa pretese infondate sulla vittoria o sul merito della missione.",
+                prompt: "Chi cerca di prendersi il merito delle imprese del protagonista?",
+                example: "I Proci che cercano di sposare Penelope o Allock in Harry Potter."
+            },
+            {
+                id: "propp_25",
+                deck: "propp",
+                code: "XXV",
+                title: "Compito Difficile",
+                category: "Ritorno / Risoluzione",
+                archetype: "Re / Giudice",
+                description: "All'eroe viene proposto un compito arduo per dimostrare la sua reale identità.",
+                prompt: "Quale ultima prova dimostrerà chi è il vero vincitore?",
+                example: "Tendere l'arco di Ulisse."
+            },
+            {
+                id: "propp_26",
+                deck: "propp",
+                code: "XXVI",
+                title: "Adempimento del Compito",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe",
+                description: "L'eroe esegue con successo il compito arduo assegnatogli.",
+                prompt: "Come riesce l'eroe nell'impresa dove gli altri hanno fallito?",
+                example: "Ulisse scocca la freccia attraverso le dodici scuri."
+            },
+            {
+                id: "propp_27",
+                deck: "propp",
+                code: "XXVII",
+                title: "Riconoscimento dell'Eroe",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe",
+                description: "L'eroe viene finalmente riconosciuto da tutti per ciò che è realmente.",
+                prompt: "Attraverso quale segno o rivelazione l'eroe viene riconosciuto?",
+                example: "La nutrice riconosce Ulisse dalla cicatrice sulla gamba."
+            },
+            {
+                id: "propp_28",
+                deck: "propp",
+                code: "XXVIII",
+                title: "Smascheramento del Falso Eroe",
+                category: "Ritorno / Risoluzione",
+                archetype: "Falso Eroe / Traditore",
+                description: "Il falso eroe o il traditore viene smascherato pubblicamente.",
+                prompt: "In che modo le bugie dell'impostore crollano di fronte alla verità?",
+                example: "Scoperta dell'inganno di Crosta/Pettigrew."
+            },
+            {
+                id: "propp_29",
+                deck: "propp",
+                code: "XXIX",
+                title: "Trasfigurazione",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe Trasformato",
+                description: "L'eroe assume un nuovo aspetto meraviglioso (nuove vesti, guarigione, regalità).",
+                prompt: "Come si riflette il cambiamento interiore dell'eroe sul suo aspetto esterno?",
+                example: "Cenerentola con l'abito da gran galà o Gandalf il Bianco."
+            },
+            {
+                id: "propp_30",
+                deck: "propp",
+                code: "XXX",
+                title: "Punizione del Nemico",
+                category: "Ritorno / Risoluzione",
+                archetype: "Antagonista",
+                description: "L'antagonista viene punito per i suoi crimini.",
+                prompt: "Quale punizione esemplare riceve chi ha causato il male?",
+                example: "L'esilio o la sconfitta definitiva dell'usurpatore."
+            },
+            {
+                id: "propp_31",
+                deck: "propp",
+                code: "XXXI",
+                title: "Nozze / Incoronazione",
+                category: "Ritorno / Risoluzione",
+                archetype: "Eroe / Sovrano",
+                description: "L'eroe si sposa, sale al trono o ottiene la massima ricompensa sociale e spirituale.",
+                prompt: "Qual è il nuovo status e la celebrazione finale dell'eroe?",
+                example: "Aragorn incoronato Re di Gondor e sposato con Arwen."
+            }
         ];
 
-        function getDeckFilter(val) {
-            if (val === 'all') return cardsDatabase;
-            if (val === 'intuiti') return cardsDatabase.filter(c => c.deck === 'intuiti_p' || c.deck === 'intuiti_s');
-            return cardsDatabase.filter(c => c.deck === val);
+        const DEFAULT_HERO_CARDS = [
+            {
+                id: "hero_1",
+                deck: "hero",
+                code: "Fase 1",
+                title: "Il Mondo Ordinario",
+                category: "Partenza",
+                archetype: "L'Eroe al sicuro",
+                description: "L'eroe viene introdotto nel suo ambiente quotidiano. Si evidenziano le sue debolezze, i desideri insoddisfatti e il contesto di partenza.",
+                prompt: "Com'è la vita di tutti i giorni del protagonista prima dell'evento scombussolante?",
+                example: "Frodo nella tranquilla Contea; Neo nel suo grigio lavoro da programmatore."
+            },
+            {
+                id: "hero_2",
+                deck: "hero",
+                code: "Fase 2",
+                title: "La Chiamata all'Avventura",
+                category: "Partenza",
+                archetype: "Il Messaggero",
+                description: "Un problema, una minaccia o un'opportunità rompe la tranquillità del Mondo Ordinario e richiede un intervento.",
+                prompt: "Quale evento improvviso costringe l'eroe a considerare un cambiamento?",
+                example: "La lettera da Hogwarts per Harry Potter; l'arrivo di Morpheus."
+            },
+            {
+                id: "hero_3",
+                deck: "hero",
+                code: "Fase 3",
+                title: "Il Rifiuto della Chiamata",
+                category: "Partenza",
+                archetype: "L'Eroe esitante",
+                description: "L'eroe esita o rifiuta la sfida per paura, senso di inadeguatezza o legami con la vita passata.",
+                prompt: "Quali dubbi o paure bloccano inizialmente il protagonista?",
+                example: "Luke Skywalker dice a Obi-Wan che deve tornare ad aiutare lo zio nei campi."
+            },
+            {
+                id: "hero_4",
+                deck: "hero",
+                code: "Fase 4",
+                title: "L'Incontro con il Mentore",
+                category: "Partenza",
+                archetype: "Il Mentore / La Guida",
+                description: "Un personaggio più saggio fornisce addestramento, consigli, equipaggiamento o la motivazione per partire.",
+                prompt: "Chi dona all'eroe la saggezza o lo strumento fondamentale per affrontare l'ignoto?",
+                example: "Gandalf per Frodo, Silente per Harry Potter, Mago Merlino."
+            },
+            {
+                id: "hero_5",
+                deck: "hero",
+                code: "Fase 5",
+                title: "Il Varco della Prima Soglia",
+                category: "Iniziazione",
+                archetype: "Guardiano della Soglia",
+                description: "L'eroe abbandona definitivamente il Mondo Ordinario ed entra nel Mondo Straordinario, ignoto e pericoloso.",
+                prompt: "Quale azione segna il punto di non ritorno per la storia?",
+                example: "Alice che cade nella tana del Coniglio Bianco."
+            },
+            {
+                id: "hero_6",
+                deck: "hero",
+                code: "Fase 6",
+                title: "Prove, Alleati, Nemici",
+                category: "Iniziazione",
+                archetype: "Alleati / Ombre",
+                description: "L'eroe impara le regole del nuovo mondo, stringe amicizie, individua i rivali e affronta prime piccole sfide.",
+                prompt: "Quali alleanze si formano e quali primi ostacoli testano la squadra?",
+                example: "La scena nella Cantina di Mos Eisley in Star Wars."
+            },
+            {
+                id: "hero_7",
+                deck: "hero",
+                code: "Fase 7",
+                title: "Avvicinamento alla Caverna Più Profonda",
+                category: "Iniziazione",
+                archetype: "Il Mutaforte / Compagni",
+                description: "L'eroe e i suoi alleati si preparano ad affrontare il pericolo principale nel cuore del territorio nemico.",
+                prompt: "Qual è il piano di attacco o la preparazione alla sfida decisiva?",
+                example: "La preparazione della Morte Nera per l'attacco dei ribelli."
+            },
+            {
+                id: "hero_8",
+                deck: "hero",
+                code: "Fase 8",
+                title: "La Prova Centrale (Orda)",
+                category: "Iniziazione",
+                archetype: "L'Ombra / Nemico Supremo",
+                description: "La crisi fisica o psicologica più grande. L'eroe tocca il fondo, affronta la morte o la sua paura più viscerale.",
+                prompt: "In che modo l'eroe rischia di perdere tutto e deve superare il suo difetto fatale?",
+                example: "Luke nella fossa del Compattatore di Rifiuti o di fronte a Darth Vader."
+            },
+            {
+                id: "hero_9",
+                deck: "hero",
+                code: "Fase 9",
+                title: "La Ricompensa (L'Elisir)",
+                category: "Ritorno",
+                archetype: "Il Tesoro / Conoscenza",
+                description: "L'eroe sopravvive alla prova, sconfigge la paura ed entra in possesso del tesoro, dell'elisir o della verità.",
+                prompt: "Quale nuova forza interiore o conoscenza acquisisce l'eroe?",
+                example: "Recupero dei piani della Morte Nera o il Bacio della Principessa."
+            },
+            {
+                id: "hero_10",
+                deck: "hero",
+                code: "Fase 10",
+                title: "La Strada del Ritorno",
+                category: "Ritorno",
+                archetype: "Inseguitore",
+                description: "L'eroe deve completare l'opera e riportare il tesoro a casa, affrontando le estreme conseguenze delle sue azioni.",
+                prompt: "Quale complicazione improvvisa minaccia la fuga dell'eroe?",
+                example: "L'inseguimento caccia dei Caccia TIE mentre la flotta fugge."
+            },
+            {
+                id: "hero_11",
+                deck: "hero",
+                code: "Fase 11",
+                title: "La Resurrezione",
+                category: "Ritorno",
+                archetype: "L'Eroe Rinato",
+                description: "L'esame finale in cui l'eroe deve dimostrare di aver appreso la lezione della Prova Centrale. Rinascita pura.",
+                prompt: "Come dimostra l'eroe di essere una persona del tutto nuova e trasformata?",
+                example: "Luke che spegne il computer di puntamento e si fida della Forza."
+            },
+            {
+                id: "hero_12",
+                deck: "hero",
+                code: "Fase 12",
+                title: "Ritorno con l'Elisir",
+                category: "Ritorno",
+                archetype: "Maestro dei Due Mondi",
+                description: "L'eroe torna nel Mondo Ordinario trasformato, portando un dono o una conoscenza per guarire la propria comunità.",
+                prompt: "In che modo il mondo di partenza risulta finalmente guarito o rinnovato?",
+                example: "La cerimonia finale di premiazione in Star Wars o la pace nella Contea."
+            }
+        ];
+
+        // STATO APPLICAZIONE
+        let currentDeck = [];
+        let drawnCards = [];
+        let currentFilter = 'all';
+        let customCards = [];
+
+        // Caricamento Dati all'avvio
+        window.onload = function() {
+            loadCardsFromStorage();
+            updateDeckSelection();
+            renderEncyclopedia();
+            loadNotebook();
+        };
+
+        function loadCardsFromStorage() {
+            const stored = localStorage.getItem('arcana_custom_cards');
+            if (stored) {
+                try {
+                    customCards = JSON.parse(stored);
+                } catch(e) {
+                    console.error("Errore nel parsing del localStorage", e);
+                    customCards = [];
+                }
+            }
         }
 
-        function drawCards() {
-            const deckType = document.getElementById('deckSelect').value;
-            const count = parseInt(document.getElementById('countSelect').value, 10);
-            const pool = [...getDeckFilter(deckType)];
+        function getFullDeck() {
+            return [...DEFAULT_PROPP_CARDS, ...DEFAULT_HERO_CARDS, ...customCards];
+        }
 
-            for (let i = pool.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [pool[i], pool[j]] = [pool[j], pool[i]];
+        function updateDeckCounts() {
+            const all = getFullDeck();
+            const proppCount = all.filter(c => c.deck === 'propp').length;
+            const heroCount = all.filter(c => c.deck === 'hero').length;
+
+            document.getElementById('count-all').innerText = all.length;
+            document.getElementById('count-propp').innerText = proppCount;
+            document.getElementById('count-hero').innerText = heroCount;
+        }
+
+        function updateDeckSelection() {
+            const selectedType = document.querySelector('input[name="deck-type"]:checked').value;
+            currentFilter = selectedType;
+            const all = getFullDeck();
+
+            if (selectedType === 'propp') {
+                currentDeck = all.filter(c => c.deck === 'propp');
+            } else if (selectedType === 'hero') {
+                currentDeck = all.filter(c => c.deck === 'hero');
+            } else {
+                currentDeck = [...all];
             }
 
-            const selected = pool.slice(0, count);
-            renderCards(selected);
+            updateDeckCounts();
         }
 
-        function renderCards(cards) {
-            const grid = document.getElementById('cardsGrid');
+        // Algoritmo Fisher-Yates per Mescolamento Casual Reale
+        function shuffleDeck(array) {
+            let m = array.length, t, i;
+            const copy = [...array];
+            while (m) {
+                i = Math.floor(Math.random() * m--);
+                t = copy[m];
+                copy[m] = copy[i];
+                copy[i] = t;
+            }
+            return copy;
+        }
+
+        // ESTRAZIONE CARTE
+        function drawCards(mode) {
+            switchTab('draw');
+            updateDeckSelection();
+
+            if (currentDeck.length === 0) {
+                alert("Il mazzo selezionato è vuoto!");
+                return;
+            }
+
+            const shuffled = shuffleDeck(currentDeck);
+            let count = 1;
+            let layoutTitle = "Estrazione";
+            let layoutSub = "";
+
+            if (mode === 'single') {
+                count = 1;
+                layoutTitle = "Carta Singola &bull; Spunto Rapido";
+                layoutSub = "Un concetto chiave per sbloccare la narrazione o risolvere un punto cieco.";
+            } else if (mode === 'trio') {
+                count = Math.min(3, shuffled.length);
+                layoutTitle = "Trittico Narrativo (3 Carte)";
+                layoutSub = "Struttura classica tripartita: Inizio, Svolta Centrale e Risoluzione.";
+            } else if (mode === 'structured') {
+                count = Math.min(4, shuffled.length);
+                layoutTitle = "Percorso Strutturato (4 Carte)";
+                layoutSub = "1. Mondo Ordinario &bull; 2. Sviluppo &bull; 3. Climax &bull; 4. Risoluzione.";
+            } else if (mode === 'five') {
+                count = Math.min(5, shuffled.length);
+                layoutTitle = "Estrazione Arricchita (5 Carte)";
+                layoutSub = "Panoramica estesa per trame articolate e sottotrame parallele.";
+            }
+
+            drawnCards = shuffled.slice(0, count);
+
+            document.getElementById('draw-title').innerHTML = layoutTitle;
+            document.getElementById('draw-subtitle').innerText = layoutSub;
+            document.getElementById('drawn-count-badge').innerText = `${drawnCards.length} carte sul tavolo`;
+
+            renderDrawnCards();
+        }
+
+        // Rendering Griglia Carte Estratte con Effetto Flip 3D
+        function renderDrawnCards() {
+            const grid = document.getElementById('cards-grid');
+            
+            if (drawnCards.length === 0) {
+                grid.innerHTML = `
+                    <div id="cards-empty-state" class="col-span-full h-80 border-2 border-dashed border-slate-800 rounded-3xl flex flex-col items-center justify-center text-center p-6 text-slate-600 space-y-3">
+                        <div class="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-slate-700 text-2xl">
+                            <i class="fa-solid fa-dice-d20"></i>
+                        </div>
+                        <p class="text-sm max-w-sm text-slate-400">Nessuna carta sul tavolo. Seleziona un tipo di estrazione dal pannello laterale per cominciare a plasmare la tua storia.</p>
+                    </div>`;
+                return;
+            }
+
             grid.innerHTML = '';
 
-            cards.forEach(card => {
-                const container = document.createElement('div');
-                container.className = 'card-container';
-                
-                const cardEl = document.createElement('div');
-                cardEl.className = 'card';
-                cardEl.onclick = () => cardEl.classList.toggle('flipped');
+            drawnCards.forEach((card, index) => {
+                const isPropp = card.deck === 'propp';
+                const badgeColor = isPropp ? 'bg-purple-950/80 text-purple-300 border-purple-500/30' : 'bg-amber-950/80 text-amber-300 border-amber-500/30';
+                const borderColor = isPropp ? 'border-purple-500/30 hover:border-purple-500/60' : 'border-amber-500/30 hover:border-amber-500/60';
+                const accentGrad = isPropp ? 'from-purple-600 to-indigo-600' : 'from-amber-500 to-rose-600';
 
-                const badgeClass = `badge-${card.deck}`;
+                const cardHTML = `
+                    <div class="perspective-1000 w-full h-[420px] cursor-pointer group" onclick="flipCard(this)">
+                        <div class="card-inner relative w-full h-full transform-style-3d rotate-y-180 rounded-2xl shadow-2xl transition-transform duration-700">
+                            
+                            <!-- RETRO CARTA (Coperta all'inizio) -->
+                            <div class="absolute inset-0 w-full h-full rounded-2xl bg-slate-900 border-2 border-slate-800 p-6 flex flex-col justify-between items-center backface-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-850 via-slate-900 to-slate-950 shadow-inner">
+                                <div class="w-full flex justify-between items-center text-xs text-slate-500 font-mono">
+                                    <span>ARCANA NARRATIVA</span>
+                                    <span>#${index + 1}</span>
+                                </div>
 
-                cardEl.innerHTML = `
-                    <div class="card-face card-front">
-                        <div class="icon">✨</div>
-                        <span class="badge ${badgeClass}">${card.type}</span>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Clicca per girare</p>
-                    </div>
-                    <div class="card-face card-back">
-                        <div>
-                            <span class="badge ${badgeClass}">${card.type}</span>
-                            <div class="card-title">${card.title}</div>
-                            <div class="card-body">
-                                <p>${card.desc}</p>
-                                ${card.imperative ? `<p class="imperative-text">"${card.imperative}"</p>` : ''}
+                                <div class="w-20 h-20 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-amber-500/60 group-hover:scale-110 transition-transform shadow-2xl">
+                                    <i class="fa-solid fa-compass-drafting text-3xl"></i>
+                                </div>
+
+                                <div class="text-center space-y-1">
+                                    <p class="text-xs font-cinzel text-amber-400 tracking-widest uppercase">Clicca per Scoprire</p>
+                                    <p class="text-[11px] text-slate-500">Rivelazione Arcanica</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="prompt-box">
-                            <strong>Prompt:</strong> ${card.prompt}
+
+                            <!-- FRONTE CARTA (Rivelata dopo il flip) -->
+                            <div class="absolute inset-0 w-full h-full rounded-2xl bg-slate-900 border ${borderColor} p-5 flex flex-col justify-between backface-hidden rotate-y-180 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 overflow-hidden">
+                                
+                                <div class="space-y-2">
+                                    <!-- Header Carta -->
+                                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                        <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider rounded-md border ${badgeColor} uppercase">
+                                            ${isPropp ? 'Propp' : 'Viaggio Eroe'}
+                                        </span>
+                                        <span class="text-xs font-mono text-slate-400 font-semibold">${card.code || ''}</span>
+                                    </div>
+
+                                    <!-- Titolo e Categoria -->
+                                    <div>
+                                        <h3 class="font-cinzel text-base font-bold text-slate-100 group-hover:text-amber-300 transition-colors">${card.title}</h3>
+                                        <div class="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
+                                            <i class="fa-solid fa-tag text-[10px] text-amber-500"></i>
+                                            <span>${card.category}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Descrizione -->
+                                    <p class="text-xs text-slate-300 leading-relaxed line-clamp-4">
+                                        ${card.description}
+                                    </p>
+                                </div>
+
+                                <!-- Box Dettagli / Spunto Scrittura -->
+                                <div class="space-y-2 pt-2 border-t border-slate-800/80">
+                                    ${card.archetype ? `
+                                        <div class="text-[11px] text-amber-400/90 flex items-center gap-1.5 font-medium">
+                                            <i class="fa-solid fa-user-ninja text-xs"></i>
+                                            <span>Archetipo: ${card.archetype}</span>
+                                        </div>
+                                    ` : ''}
+
+                                    <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80 text-[11px] space-y-1">
+                                        <span class="font-semibold text-amber-300 block"><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Spunto Scrittura:</span>
+                                        <p class="text-slate-400 italic line-clamp-2">${card.prompt || 'Come risponde il tuo personaggio a questo evento?'}</p>
+                                    </div>
+
+                                    ${card.example ? `
+                                        <div class="text-[10px] text-slate-500 truncate">
+                                            <span class="font-semibold text-slate-400">Es:</span> ${card.example}
+                                        </div>
+                                    ` : ''}
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 `;
-
-                container.appendChild(cardEl);
-                grid.appendChild(container);
+                grid.insertAdjacentHTML('beforeend', cardHTML);
             });
         }
 
-        function flipAll() {
-            document.querySelectorAll('.card').forEach(c => c.classList.toggle('flipped'));
+        // Rotazione Flip della carta
+        function flipCard(element) {
+            const inner = element.querySelector('.card-inner');
+            inner.classList.toggle('rotate-y-180');
         }
 
-        function copyNotes() {
-            const textarea = document.getElementById('notes');
-            textarea.select();
-            navigator.clipboard.writeText(textarea.value);
-            alert('Appunti copiati negli appunti!');
+        function flipAllCards(showFront) {
+            const cards = document.querySelectorAll('.card-inner');
+            cards.forEach(c => {
+                if (showFront) {
+                    c.classList.remove('rotate-y-180');
+                } else {
+                    c.classList.add('rotate-y-180');
+                }
+            });
         }
 
-        function clearNotes() {
-            if (confirm('Vuoi davvero cancellare il contenuto del taccuino?')) {
-                document.getElementById('notes').value = '';
+        // ENCICLOPEDIA / BROWSER
+        let encCategoryFilter = 'all';
+
+        function filterEncyclopedia(cat) {
+            encCategoryFilter = cat;
+            document.querySelectorAll('.enc-filter-btn').forEach(btn => {
+                if (btn.dataset.category === cat) {
+                    btn.classList.remove('bg-slate-800', 'text-slate-300');
+                    btn.classList.add('bg-amber-500', 'text-slate-950', 'font-semibold');
+                } else {
+                    btn.classList.remove('bg-amber-500', 'text-slate-950', 'font-semibold');
+                    btn.classList.add('bg-slate-800', 'text-slate-300');
+                }
+            });
+            renderEncyclopedia();
+        }
+
+        function renderEncyclopedia() {
+            const grid = document.getElementById('encyclopedia-grid');
+            const search = document.getElementById('browse-search').value.toLowerCase();
+            const allCards = getFullDeck();
+
+            const filtered = allCards.filter(c => {
+                const matchCategory = encCategoryFilter === 'all' || c.deck === encCategoryFilter;
+                const matchSearch = c.title.toLowerCase().includes(search) || 
+                                    c.description.toLowerCase().includes(search) ||
+                                    (c.archetype && c.archetype.toLowerCase().includes(search));
+                return matchCategory && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-slate-500 py-12 text-sm">Nessuna carta trovata per i criteri specificati.</p>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(card => {
+                const isPropp = card.deck === 'propp';
+                const badgeColor = isPropp ? 'bg-purple-950/80 text-purple-300 border-purple-500/30' : 'bg-amber-950/80 text-amber-300 border-amber-500/30';
+                
+                return `
+                    <div class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-4 transition-all flex flex-col justify-between space-y-3">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="px-2 py-0.5 text-[10px] font-semibold tracking-wider rounded-md border ${badgeColor} uppercase">
+                                    ${isPropp ? 'Propp' : 'Viaggio Eroe'}
+                                </span>
+                                <span class="text-xs font-mono text-slate-500">${card.code || ''}</span>
+                            </div>
+                            <h3 class="font-cinzel text-sm font-bold text-slate-100">${card.title}</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">${card.description}</p>
+                        </div>
+                        <div class="pt-2 border-t border-slate-800/60 text-[11px] text-slate-500 flex items-center justify-between">
+                            <span><i class="fa-solid fa-folder text-amber-500/70 mr-1"></i> ${card.category}</span>
+                            ${card.archetype ? `<span class="truncate max-w-[120px] text-right"><i class="fa-solid fa-user text-slate-600 mr-1"></i> ${card.archetype}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // CREAZIONE E GESTIONE CARTE PERSONALIZZATE
+        function handleCreateCard(event) {
+            event.preventDefault();
+            
+            const newCard = {
+                id: 'custom_' + Date.now(),
+                deck: document.getElementById('card-deck-type').value,
+                code: 'Custom',
+                title: document.getElementById('card-title').value.trim(),
+                category: document.getElementById('card-category').value.trim(),
+                archetype: document.getElementById('card-archetype').value.trim(),
+                description: document.getElementById('card-desc').value.trim(),
+                prompt: document.getElementById('card-prompt').value.trim(),
+                example: document.getElementById('card-example').value.trim()
+            };
+
+            customCards.push(newCard);
+            localStorage.setItem('arcana_custom_cards', JSON.stringify(customCards));
+
+            document.getElementById('custom-card-form').reset();
+            closeModal('add-card-modal');
+            updateDeckSelection();
+            renderEncyclopedia();
+
+            alert('Carta salvata con successo nel tuo mazzo locale!');
+        }
+
+        // ESPORTA JSON
+        function exportJSON() {
+            const data = {
+                version: "1.0",
+                timestamp: new Date().toISOString(),
+                proppCards: DEFAULT_PROPP_CARDS,
+                heroCards: DEFAULT_HERO_CARDS,
+                customCards: customCards
+            };
+
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `arcana_narrativa_mazzo_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // IMPORTA JSON
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (importedData.customCards && Array.isArray(importedData.customCards)) {
+                        customCards = importedData.customCards;
+                        localStorage.setItem('arcana_custom_cards', JSON.stringify(customCards));
+                        updateDeckSelection();
+                        renderEncyclopedia();
+                        alert(`Mazzo importato con successo! Importate ${customCards.length} carte personalizzate.`);
+                    } else {
+                        alert('Formato file JSON non valido per Arcana Narrativa.');
+                    }
+                } catch(err) {
+                    alert('Errore nella lettura del file JSON: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetDefaultDeck() {
+            if (confirm("Vuoi cancellare le carte personalizzate e ripristinare i mazzi predefiniti?")) {
+                localStorage.removeItem('arcana_custom_cards');
+                customCards = [];
+                updateDeckSelection();
+                renderEncyclopedia();
+                alert("Mazzi ripristinati allo stato iniziale.");
             }
         }
 
-        // Estrazione iniziale automatica all'avvio
-        drawCards();
+        // TACCUINO DELLO SCRITTORE
+        function toggleNotebook() {
+            const drawer = document.getElementById('notebook-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function saveNotebookStory() {
+            const title = document.getElementById('story-title').value;
+            const content = document.getElementById('story-content').value;
+            
+            localStorage.setItem('arcana_notebook_title', title);
+            localStorage.setItem('arcana_notebook_content', content);
+
+            document.getElementById('notebook-badge').classList.remove('hidden');
+            alert('Appunti salvati nel browser!');
+        }
+
+        function loadNotebook() {
+            const title = localStorage.getItem('arcana_notebook_title');
+            const content = localStorage.getItem('arcana_notebook_content');
+
+            if (title) document.getElementById('story-title').value = title;
+            if (content) {
+                document.getElementById('story-content').value = content;
+                document.getElementById('notebook-badge').classList.remove('hidden');
+            }
+        }
+
+        function downloadStoryTxt() {
+            const title = document.getElementById('story-title').value || "Storia_Senza_Titolo";
+            const content = document.getElementById('story-content').value || "";
+
+            const text = `${title.toUpperCase()}\n${'='.repeat(title.length)}\n\n${content}`;
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${title.toLowerCase().replace(/\s+/g, '_')}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // UTILITY INTERFACCIA TAB & MODALI
+        function switchTab(tab) {
+            const drawView = document.getElementById('view-draw');
+            const browseView = document.getElementById('view-browse');
+            const btnDraw = document.getElementById('btn-tab-draw');
+            const btnBrowse = document.getElementById('btn-tab-browse');
+
+            if (tab === 'draw') {
+                drawView.classList.remove('hidden');
+                browseView.classList.add('hidden');
+                btnDraw.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg bg-amber-500 text-slate-950 hover:bg-amber-400 transition-colors flex items-center gap-1.5";
+                btnBrowse.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1.5";
+            } else {
+                drawView.classList.add('hidden');
+                browseView.classList.remove('hidden');
+                btnBrowse.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg bg-amber-500 text-slate-950 hover:bg-amber-400 transition-colors flex items-center gap-1.5";
+                btnDraw.className = "px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1.5";
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
     </script>
 </body>
 </html>
