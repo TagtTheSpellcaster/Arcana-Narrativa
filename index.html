@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestore Carte Narrative & Creative</title>
+    <style>
+        :root {
+            --bg-primary: #121214;
+            --bg-secondary: #1a1a1e;
+            --bg-card: #24242a;
+            --text-main: #f0f0f5;
+            --text-muted: #a0a0b0;
+            --accent-propp: #d97706;
+            --accent-hero: #2563eb;
+            --accent-intuiti-p: #7c3aed;
+            --accent-intuiti-s: #059669;
+            --border-color: #3f3f46;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .controls {
+            background-color: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, button {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        select:focus, button:focus {
+            border-color: #6366f1;
+        }
+
+        button.btn-primary {
+            background-color: #4f46e5;
+            border-color: #6366f1;
+            font-weight: 600;
+        }
+
+        button.btn-primary:hover {
+            background-color: #4338ca;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            height: 380px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-front {
+            background-color: var(--bg-card);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 2px dashed var(--border-color);
+        }
+
+        .card-back {
+            background-color: var(--bg-secondary);
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+
+        .badge {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .badge-propp { background-color: rgba(217, 119, 6, 0.2); color: #f59e0b; border: 1px solid var(--accent-propp); }
+        .badge-hero { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid var(--accent-hero); }
+        .badge-intuiti-p { background-color: rgba(124, 58, 237, 0.2); color: #c084fc; border: 1px solid var(--accent-intuiti-p); }
+        .badge-intuiti-s { background-color: rgba(5, 150, 105, 0.2); color: #34d399; border: 1px solid var(--accent-intuiti-s); }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-body {
+            font-size: 0.88rem;
+            color: #d1d5db;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .prompt-box {
+            background-color: rgba(0,0,0,0.3);
+            border-left: 3px solid #6366f1;
+            padding: 8px;
+            margin-top: 8px;
+            font-style: italic;
+            font-size: 0.82rem;
+        }
+
+        .notebook {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Engine Narrativo & Creativo</h1>
+    </header>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="deckSelect">Mazzo</label>
+            <select id="deckSelect">
+                <option value="all">Tutti i Mazzi (121 carte)</option>
+                <option value="propp">Funzioni di Propp (31)</option>
+                <option value="hero">Viaggio dell'Eroe (12)</option>
+                <option value="intuiti">Intùiti Complete (78)</option>
+                <option value="intuiti_p">Intùiti Primari (22)</option>
+                <option value="intuiti_s">Intùiti Secondari (56)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="countSelect">Estrazione</label>
+            <select id="countSelect">
+                <option value="1">1 Carta (Spunto singolo)</option>
+                <option value="3">3 Carte (Inizio / Svolta / Fine)</option>
+                <option value="5">5 Carte (Struttura complessa)</option>
+            </select>
+        </div>
+
+        <button class="btn-primary" onclick="drawCards()">Estrai Carte</button>
+        <button onclick="flipAll()">Gira Tutte</button>
+    </div>
+
+    <main class="grid" id="cardsGrid"></main>
+
+    <div class="notebook">
+        <h2>Taccuino Appunti</h2>
+        <textarea id="notes" placeholder="Scrivi qui lo sviluppo del tuo scenario o storia basandoti sulle carte estratte..."></textarea>
+    </div>
+
+    <script>
+        const cardsDatabase = [
+            // FUNZIONI DI PROPP (31)
+            ...Array.from({length: 31}, (_, i) => {
+                const names = [
+                    "Allontanamento", "Divieto", "Infrazione", "Investigazione", "Delazione", "Ingannevolezza", "Complicità",
+                    "Danneggiamento / Mancanza", "Mediazione", "Consenso del Reagente", "Partenza", "Prima Funzione del Donatore",
+                    "Reazione dell'Eroe", "Fornitura dell'Oggetto Magico", "Trasferimento nello Spazio", "Lotta", "Marchiatura",
+                    "Vittoria", "Rifornimento", "Ritorno", "Inseguimento", "Salvataggio", "Arrivo Incognito", "Pretese Ingiustificate",
+                    "Compito Difficile", "Esecuzione del Compito", "Riconoscimento", "Mascheramento / Svelamento", "Punizione", "Nozze / Incoronazione"
+                ];
+                return {
+                    id: `propp_${i+1}`,
+                    deck: "propp",
+                    type: "Funzione di Propp",
+                    title: `${i+1}. ${names[i] || 'Funzione ' + (i+1)}`,
+                    desc: "Elemento strutturale della morfologia della fiaba secondo Vladimir Propp.",
+                    prompt: "Come si manifesta questo passaggio di eventi nella sequenza dell'azione?"
+                };
+            }),
+
+            // VIAGGIO DELL'EROE (12)
+            ...[
+                "Mondo Ordinario", "Chiamata all'Avventura", "Rifiuto della Chiamata", "Incontro con il Mentore",
+                "Varco della Prima Soglia", "Prove, Alleati, Nemici", "Avvicinamento alla Caverna Più Profonda",
+                "Prova Centrale (Ordata)", "Ricompensa (Spada)", "Sulla Via del Ritorno", "Resurrezione", "Ritorno con l'Elisir"
+            ].map((title, i) => ({
+                id: `hero_${i+1}`,
+                deck: "hero",
+                type: "Viaggio dell'Eroe",
+                title: `${i+1}. ${title}`,
+                desc: "Fase mitologica dello sviluppo dell'eroe e della sua trasformazione interna.",
+                prompt: "In che stato psicologico ed emotivo si trova il personaggio durante questa fase?"
+            })),
+
+            // INTÙITI PRIMARI (22)
+            ...Array.from({length: 22}, (_, i) => ({
+                id: `int_p_${i+1}`,
+                deck: "intuiti_p",
+                type: "Intùiti Primario",
+                title: `Primario ${['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII'][i]}`,
+                desc: "Modello di pensiero ad ampio respiro / Archetipo di riflessione profonda.",
+                imperative: "Cambia prospettiva strutturale.",
+                prompt: "Stai valutando il problema con preconcetti o rigidità?"
+            })),
+
+            // INTÙITI SECONDARI (56)
+            ...['Fuoco (Energia)', 'Aria (Intelletto)', 'Acqua (Emozione)', 'Terra (Materia)'].flatMap((elem, eIdx) => 
+                Array.from({length: 14}, (_, i) => ({
+                    id: `int_s_${eIdx}_${i+1}`,
+                    deck: "intuiti_s",
+                    type: `Intùiti Secondario - ${elem}`,
+                    title: `${elem.split(' ')[0]} ${i+1}`,
+                    desc: `Stimolo puntuale focalizzato sull'elemento ${elem}.`,
+                    imperative: "Sblocca l'azione specifica.",
+                    prompt: "Quale dettaglio operativo di questo settore richiede attenzione immediata?"
+                }))
+            )
+        ];
+
+        function getDeckFilter(val) {
+            if (val === 'all') return cardsDatabase;
+            if (val === 'intuiti') return cardsDatabase.filter(c => c.deck === 'intuiti_p' || c.deck === 'intuiti_s');
+            return cardsDatabase.filter(c => c.deck === val);
+        }
+
+        function drawCards() {
+            const deckType = document.getElementById('deckSelect').value;
+            const count = parseInt(document.getElementById('countSelect').value, 10);
+            const pool = [...getDeckFilter(deckType)];
+
+            // Fisher-Yates Shuffle
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]];
+            }
+
+            const selected = pool.slice(0, count);
+            renderCards(selected);
+        }
+
+        function getBadgeClass(deck) {
+            switch(deck) {
+                case 'propp': return 'badge-propp';
+                case 'hero': return 'badge-hero';
+                case 'intuiti_p': return 'badge-intuiti-p';
+                case 'intuiti_s': return 'badge-intuiti-s';
+                default: return '';
+            }
+        }
+
+        function renderCards(cards) {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+
+            cards.forEach(card => {
+                const container = document.createElement('div');
+                container.className = 'card-container';
+                
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card';
+                cardEl.onclick = () => cardEl.classList.toggle('flipped');
+
+                const badgeCls = getBadgeClass(card.deck);
+
+                cardEl.innerHTML = `
+                    <div class="card-face card-front">
+                        <span class="badge ${badgeCls}">${card.type}</span>
+                        <h3>Clicca per rivelare</h3>
+                    </div>
+                    <div class="card-face card-back">
+                        <div>
+                            <span class="badge ${badgeCls}">${card.type}</span>
+                            <div class="card-title">${card.title}</div>
+                            <div class="card-body">
+                                <p>${card.desc}</p>
+                                ${card.imperative ? `<p><strong>Imperativo:</strong> ${card.imperative}</p>` : ''}
+                            </div>
+                        </div>
+                        <div class="prompt-box">
+                            <strong>Spunto:</strong> ${card.prompt}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(cardEl);
+                grid.appendChild(container);
+            });
+        }
+
+        function flipAll() {
+            document.querySelectorAll('.card').forEach(c => c.classList.toggle('flipped'));
+        }
+
+        // Prima estrazione automatica all'avvio
+        drawCards();
+    </script>
+</body>
+</html>
