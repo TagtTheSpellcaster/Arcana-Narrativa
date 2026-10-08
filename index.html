@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engine Narrativo & Creativo - Carte di Propp, Viaggio dell'Eroe & Intùiti</title>
+    <title>Engine Narrativo & Creativo - Propp, Viaggio dell'Eroe & Intùiti</title>
     <style>
         :root {
             --bg-primary: #0f172a;
@@ -212,7 +212,6 @@
         .badge-hero { background-color: rgba(59, 130, 246, 0.15); color: var(--accent-hero); border: 1px solid var(--accent-hero); }
         .badge-intuiti_p { background-color: rgba(168, 85, 247, 0.15); color: var(--accent-intuiti-p); border: 1px solid var(--accent-intuiti-p); }
         .badge-intuiti_s { background-color: rgba(16, 185, 129, 0.15); color: var(--accent-intuiti-s); border: 1px solid var(--accent-intuiti-s); }
-        .badge-custom { background-color: rgba(236, 72, 153, 0.15); color: var(--accent-custom); border: 1px solid var(--accent-custom); }
 
         .card-title {
             font-size: 1.1rem;
@@ -350,7 +349,6 @@
     </div>
 
     <script>
-        // DATASET COMPLETO 121 CARTE
         const cardsDatabase = [
             // --- FUNZIONI DI PROPP (31) ---
             ...[
@@ -398,7 +396,7 @@
                 ["Mondo Ordinario", "L'eroe nel suo ambiente quotidiano prima del cambiamento.", "Mostra i limiti e i desideri inespressi nel contesto abituale."],
                 ["Chiamata all'Avventura", "Un evento o messaggero rompe la routine e stabilisce la sfida.", "Cosa scombussola la stabilità del protagonista?"],
                 ["Rifiuto della Chiamata", "L'eroe esita, spaventato dal rischio o dal cambiamento.", "Quale paura frena il primo passo?"],
-                ["Incontro con il Mentore", "Un guida fornisce consigli, addestramento o strumenti.", "Chi trasmette la saggezza o l'impulso necessario?"],
+                ["Incontro con il Mentore", "Una guida fornisce consigli, addestramento o strumenti.", "Chi trasmette la saggezza o l'impulso necessario?"],
                 ["Varco della Prima Soglia", "L'eroe entra definitivamente nel Mondo Straordinario.", "Qual è il punto di non ritorno?"],
                 ["Prove, Alleati, Nemici", "L'eroe impara le regole del nuovo mondo e stringe legami.", "Chi sta dalla sua parte e chi ne ostacola il cammino?"],
                 ["Avvicinamento alla Caverna Più Profonda", "Preparazione alla sfida principale nel cuore del pericolo.", "Come ci si prepara ad affrontare la paura più grande?"],
@@ -439,7 +437,7 @@
                 ["19 - Il Nido", "Crea un rifugio di sicurezza.", "Dove riprendono fiato le forze in campo?"],
                 ["20 - La Scintilla", "Cerca l'intuizione istintiva.", "Qual è il primo pensiero irrazionale che ti viene?"],
                 ["21 - L'Orizzonte", "Guarda le conseguenze a lungo termine.", "Dove porta questo passaggio fra tre capitoli?"],
-                ["22 - Il Silenzio", "Pausa strategica e ascolto.", "Lascia che i fatti decantino."];
+                ["22 - Il Silenzio", "Pausa strategica e ascolto.", "Lascia che i fatti decantino."]
             ].map((ip, i) => ({
                 id: `int_p_${i+1}`,
                 deck: "intuiti_p",
@@ -502,7 +500,6 @@
             const count = parseInt(document.getElementById('countSelect').value, 10);
             const pool = [...getDeckFilter(deckType)];
 
-            // Mescolamento Fisher-Yates
             for (let i = pool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -569,7 +566,7 @@
             }
         }
 
-        // Estrazione iniziale
+        // Estrazione iniziale automatica all'avvio
         drawCards();
     </script>
 </body>
