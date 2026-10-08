@@ -3,102 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestore Carte Narrative & Creative</title>
+    <title>Engine Narrativo & Creativo - Carte di Propp, Viaggio dell'Eroe & Intùiti</title>
     <style>
         :root {
-            --bg-primary: #121214;
-            --bg-secondary: #1a1a1e;
-            --bg-card: #24242a;
-            --text-main: #f0f0f5;
-            --text-muted: #a0a0b0;
-            --accent-propp: #d97706;
-            --accent-hero: #2563eb;
-            --accent-intuiti-p: #7c3aed;
-            --accent-intuiti-s: #059669;
-            --border-color: #3f3f46;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #475569;
+            --accent-propp: #f59e0b;
+            --accent-hero: #3b82f6;
+            --accent-intuiti-p: #a855f7;
+            --accent-intuiti-s: #10b981;
+            --accent-custom: #ec4899;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
             background-color: var(--bg-primary);
             color: var(--text-main);
-            padding: 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            min-height: 100vh;
         }
 
         header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .controls {
             background-color: var(--bg-secondary);
-            padding: 15px;
-            border-radius: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #3b82f6, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            flex: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .controls-panel {
+            background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
+            gap: 1rem;
+            align-items: flex-end;
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 0.4rem;
+            flex: 1;
+            min-width: 180px;
         }
 
-        label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        .control-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
         }
 
-        select, button {
-            background-color: var(--bg-card);
+        select, button, input {
+            background-color: var(--bg-primary);
             color: var(--text-main);
             border: 1px solid var(--border-color);
-            padding: 8px 12px;
+            padding: 0.6rem 0.8rem;
             border-radius: 6px;
-            font-size: 0.95rem;
-            cursor: pointer;
+            font-size: 0.9rem;
             outline: none;
+            transition: all 0.2s;
         }
 
-        select:focus, button:focus {
+        select:focus, button:focus, input:focus {
             border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
         }
 
         button.btn-primary {
             background-color: #4f46e5;
             border-color: #6366f1;
-            font-weight: 600;
+            color: #ffffff;
         }
 
         button.btn-primary:hover {
             background-color: #4338ca;
         }
 
-        .grid {
+        button.btn-secondary:hover {
+            background-color: var(--bg-card);
+        }
+
+        .grid-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
         }
 
         .card-container {
@@ -126,19 +170,25 @@
             backface-visibility: hidden;
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            padding: 20px;
+            padding: 1.25rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
 
         .card-front {
-            background-color: var(--bg-card);
+            background: linear-gradient(145deg, var(--bg-secondary), var(--bg-card));
+            border: 2px dashed var(--border-color);
             align-items: center;
             justify-content: center;
             text-align: center;
-            border: 2px dashed var(--border-color);
+        }
+
+        .card-front .icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
         }
 
         .card-back {
@@ -149,162 +199,296 @@
 
         .badge {
             align-self: flex-start;
-            font-size: 0.75rem;
-            padding: 3px 8px;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 10px;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
         }
 
-        .badge-propp { background-color: rgba(217, 119, 6, 0.2); color: #f59e0b; border: 1px solid var(--accent-propp); }
-        .badge-hero { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid var(--accent-hero); }
-        .badge-intuiti-p { background-color: rgba(124, 58, 237, 0.2); color: #c084fc; border: 1px solid var(--accent-intuiti-p); }
-        .badge-intuiti-s { background-color: rgba(5, 150, 105, 0.2); color: #34d399; border: 1px solid var(--accent-intuiti-s); }
+        .badge-propp { background-color: rgba(245, 158, 11, 0.15); color: var(--accent-propp); border: 1px solid var(--accent-propp); }
+        .badge-hero { background-color: rgba(59, 130, 246, 0.15); color: var(--accent-hero); border: 1px solid var(--accent-hero); }
+        .badge-intuiti_p { background-color: rgba(168, 85, 247, 0.15); color: var(--accent-intuiti-p); border: 1px solid var(--accent-intuiti-p); }
+        .badge-intuiti_s { background-color: rgba(16, 185, 129, 0.15); color: var(--accent-intuiti-s); border: 1px solid var(--accent-intuiti-s); }
+        .badge-custom { background-color: rgba(236, 72, 153, 0.15); color: var(--accent-custom); border: 1px solid var(--accent-custom); }
 
         .card-title {
             font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
         }
 
         .card-body {
-            font-size: 0.88rem;
-            color: #d1d5db;
+            font-size: 0.85rem;
+            color: var(--text-muted);
             line-height: 1.4;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 0.5rem;
+        }
+
+        .imperative-text {
+            color: #f1f5f9;
+            font-weight: 600;
+            font-style: italic;
         }
 
         .prompt-box {
-            background-color: rgba(0,0,0,0.3);
+            background-color: rgba(15, 23, 42, 0.6);
             border-left: 3px solid #6366f1;
-            padding: 8px;
-            margin-top: 8px;
-            font-style: italic;
-            font-size: 0.82rem;
+            padding: 0.6rem;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.8rem;
+            color: #e2e8f0;
+            margin-top: 0.5rem;
         }
 
-        .notebook {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 15px;
+        .sidebar {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 1.5rem;
+        }
+
+        .notebook-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .notebook-panel h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
         textarea {
             width: 100%;
-            height: 100px;
+            height: 320px;
             background-color: var(--bg-primary);
             color: var(--text-main);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 10px;
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
             resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #6366f1;
+        }
+
+        .action-links {
+            display: flex;
+            gap: 0.5rem;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Engine Narrativo & Creativo</h1>
+        <div class="logo-title">
+            <h1>Engine Narrativo & Creativo</h1>
+            <p>Propp (31) • Viaggio dell'Eroe (12) • Intùiti (78)</p>
+        </div>
     </header>
 
-    <div class="controls">
-        <div class="control-group">
-            <label for="deckSelect">Mazzo</label>
-            <select id="deckSelect">
-                <option value="all">Tutti i Mazzi (121 carte)</option>
-                <option value="propp">Funzioni di Propp (31)</option>
-                <option value="hero">Viaggio dell'Eroe (12)</option>
-                <option value="intuiti">Intùiti Complete (78)</option>
-                <option value="intuiti_p">Intùiti Primari (22)</option>
-                <option value="intuiti_s">Intùiti Secondari (56)</option>
-            </select>
-        </div>
+    <div class="app-container">
+        <section class="main-content">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="deckSelect">Mazzo</label>
+                    <select id="deckSelect">
+                        <option value="all">Tutti i Mazzi (121 Carte)</option>
+                        <option value="propp">Funzioni di Propp (31)</option>
+                        <option value="hero">Viaggio dell'Eroe (12)</option>
+                        <option value="intuiti">Intùiti Complete (78)</option>
+                        <option value="intuiti_p">Intùiti Primari (22)</option>
+                        <option value="intuiti_s">Intùiti Secondari (56)</option>
+                    </select>
+                </div>
 
-        <div class="control-group">
-            <label for="countSelect">Estrazione</label>
-            <select id="countSelect">
-                <option value="1">1 Carta (Spunto singolo)</option>
-                <option value="3">3 Carte (Inizio / Svolta / Fine)</option>
-                <option value="5">5 Carte (Struttura complessa)</option>
-            </select>
-        </div>
+                <div class="control-group">
+                    <label for="countSelect">Estrazione</label>
+                    <select id="countSelect">
+                        <option value="1">1 Carta (Spunto Rapido)</option>
+                        <option value="3">3 Carte (Inizio / Svolta / Fine)</option>
+                        <option value="4">4 Carte (Struttura in 4 Atti)</option>
+                        <option value="5">5 Carte (Percorso Completo)</option>
+                    </select>
+                </div>
 
-        <button class="btn-primary" onclick="drawCards()">Estrai Carte</button>
-        <button onclick="flipAll()">Gira Tutte</button>
-    </div>
+                <button class="btn-primary" onclick="drawCards()">
+                    <span>🎴</span> Estrai Carte
+                </button>
+                <button class="btn-secondary" onclick="flipAll()">
+                    <span>🔄</span> Gira Tutte
+                </button>
+            </div>
 
-    <main class="grid" id="cardsGrid"></main>
+            <div class="grid-cards" id="cardsGrid"></div>
+        </section>
 
-    <div class="notebook">
-        <h2>Taccuino Appunti</h2>
-        <textarea id="notes" placeholder="Scrivi qui lo sviluppo del tuo scenario o storia basandoti sulle carte estratte..."></textarea>
+        <aside class="sidebar">
+            <div class="notebook-panel">
+                <h2>Taccuino dello Scrittore</h2>
+                <textarea id="notes" placeholder="Scrivi qui i tuoi appunti, la trama o le riflessioni generate dalle carte estratte..."></textarea>
+                <div class="action-links">
+                    <button class="btn-secondary" style="width: 100%;" onclick="copyNotes()">Copia Testo</button>
+                    <button class="btn-secondary" style="width: 100%;" onclick="clearNotes()">Pulisci</button>
+                </div>
+            </div>
+        </aside>
     </div>
 
     <script>
+        // DATASET COMPLETO 121 CARTE
         const cardsDatabase = [
-            // FUNZIONI DI PROPP (31)
-            ...Array.from({length: 31}, (_, i) => {
-                const names = [
-                    "Allontanamento", "Divieto", "Infrazione", "Investigazione", "Delazione", "Ingannevolezza", "Complicità",
-                    "Danneggiamento / Mancanza", "Mediazione", "Consenso del Reagente", "Partenza", "Prima Funzione del Donatore",
-                    "Reazione dell'Eroe", "Fornitura dell'Oggetto Magico", "Trasferimento nello Spazio", "Lotta", "Marchiatura",
-                    "Vittoria", "Rifornimento", "Ritorno", "Inseguimento", "Salvataggio", "Arrivo Incognito", "Pretese Ingiustificate",
-                    "Compito Difficile", "Esecuzione del Compito", "Riconoscimento", "Mascheramento / Svelamento", "Punizione", "Nozze / Incoronazione"
-                ];
-                return {
-                    id: `propp_${i+1}`,
-                    deck: "propp",
-                    type: "Funzione di Propp",
-                    title: `${i+1}. ${names[i] || 'Funzione ' + (i+1)}`,
-                    desc: "Elemento strutturale della morfologia della fiaba secondo Vladimir Propp.",
-                    prompt: "Come si manifesta questo passaggio di eventi nella sequenza dell'azione?"
-                };
-            }),
-
-            // VIAGGIO DELL'EROE (12)
+            // --- FUNZIONI DI PROPP (31) ---
             ...[
-                "Mondo Ordinario", "Chiamata all'Avventura", "Rifiuto della Chiamata", "Incontro con il Mentore",
-                "Varco della Prima Soglia", "Prove, Alleati, Nemici", "Avvicinamento alla Caverna Più Profonda",
-                "Prova Centrale (Ordata)", "Ricompensa (Spada)", "Sulla Via del Ritorno", "Resurrezione", "Ritorno con l'Elisir"
-            ].map((title, i) => ({
+                ["Allontanamento", "Un membro della famiglia si allontana da casa.", "Chi abbandona il nucleo sicuro e per quale motivo?"],
+                ["Divieto", "All'eroe viene imposto un divieto o un ordine.", "Quale limite invalicabile viene stabilito?"],
+                ["Infrazione", "Il divieto viene infranto.", "Chi cede alla tentazione o alla necessità di trasgredire?"],
+                ["Investigazione", "L'antagonista tenta una ricognizione.", "Come cerca informazioni il nemico?"],
+                ["Delazione", "L'antagonista riceve informazioni sulla vittima.", "Quale soffia o tradimento svela il punto debole?"],
+                ["Ingannevolezza", "L'antagonista tenta di ingannare la vittima per impossessarsi di lei.", "Quale trappola o travestimento viene usato?"],
+                ["Complicità", "La vittima cade nell'inganno e aiuta involontariamente il nemico.", "In che modo l'eroe casca nella rete?"],
+                ["Danneggiamento / Mancanza", "L'antagonista reca danno o all'eroe manca qualcosa di essenziale.", "Quale rottura dell'equilibrio dà inizio all'azione?"],
+                ["Mediazione", "La sventura o mancanza viene resa nota; l'eroe riceve una chiamata.", "Chi chiede aiuto o rivela la missione?"],
+                ["Consenso del Reagente", "L'eroe sceglie di agire e accettare la missione.", "Qual è la motivazione interna che lo spinge ad andare?"],
+                ["Partenza", "L'eroe abbandona la casa o il contesto noto.", "Qual è il primo passo verso l'ignoto?"],
+                ["Prima Funzione del Donatore", "L'eroe viene messo alla prova in vista di un dono.", "Quale incontro saggia il suo valore?"],
+                ["Reazione dell'Eroe", "L'eroe supera (o fallisce) la prova del Donatore.", "In che modo dimostra la sua virtù o arguzia?"],
+                ["Fornitura dell'Oggetto Magico", "L'eroe entra in possesso del mezzo o alleato magico.", "Quale strumento speciale gli viene affidato?"],
+                ["Trasferimento nello Spazio", "L'eroe condotto sul luogo dove si trova l'oggetto della ricerca.", "Come raggiunge la soglia del pericolo?"],
+                ["Lotta", "L'eroe e l'antagonista si affrontano direttamente.", "Qual è il primo scontro diretto?"],
+                ["Marchiatura", "All'eroe viene impresso un marchio o ferita.", "Quale segno fisico o emotivo resta sull'eroe?"],
+                ["Vittoria", "L'antagonista viene sconfitto.", "Come viene superato temporaneamente l'ostacolo?"],
+                ["Rifornimento", "La mancanza iniziale viene colmata.", "Cosa viene recuperato o risanato?"],
+                ["Ritorno", "L'eroe intraprende il cammino di ritorno.", "Come comincia il viaggio verso casa?"],
+                ["Inseguimento", "L'eroe viene inseguito da forze ostili.", "Quale nuova minaccia incalza alle spalle?"],
+                ["Salvataggio", "L'eroe si salva dall'inseguimento.", "Quale rifugio o espediente evita il disastro?"],
+                ["Arrivo Incognito", "L'eroe arriva in patria o in un nuovo luogo senza farsi riconoscere.", "Perché deve nascondere la sua identità?"],
+                ["Pretese Ingiustificate", "Un falso eroe avanza pretese sul merito dell'impresa.", "Chi cerca di appropriarsi dei risultati dell'eroe?"],
+                ["Compito Difficile", "All'eroe viene proposta una prova complessa.", "Qual è l'enigma o l'impresa finale da compiere?"],
+                ["Esecuzione del Compito", "Il compito difficile viene eseguito.", "Come risolve la prova finale?"],
+                ["Riconoscimento", "L'eroe viene riconosciuto.", "Come viene rivelata la verità su di lui?"],
+                ["Mascheramento / Svelamento", "Il falso eroe o l'antagonista viene smascherato.", "Quale prova inconfutabile smaschera l'inganno?"],
+                ["Punizione", "L'antagonista viene punito o neutralizzato.", "Qual è la giusta conseguenza per il colpevole?"],
+                ["Nozze / Incoronazione", "L'eroe si sposa, sale al trono o ottiene la ricompensa suprema.", "Qual è il nuovo stato di equilibrio e trionfo?"]
+            ].map((f, i) => ({
+                id: `propp_${i+1}`,
+                deck: "propp",
+                type: "Funzione di Propp",
+                title: `${i+1}. ${f[0]}`,
+                desc: f[1],
+                prompt: f[2]
+            })),
+
+            // --- VIAGGIO DELL'EROE (12) ---
+            ...[
+                ["Mondo Ordinario", "L'eroe nel suo ambiente quotidiano prima del cambiamento.", "Mostra i limiti e i desideri inespressi nel contesto abituale."],
+                ["Chiamata all'Avventura", "Un evento o messaggero rompe la routine e stabilisce la sfida.", "Cosa scombussola la stabilità del protagonista?"],
+                ["Rifiuto della Chiamata", "L'eroe esita, spaventato dal rischio o dal cambiamento.", "Quale paura frena il primo passo?"],
+                ["Incontro con il Mentore", "Un guida fornisce consigli, addestramento o strumenti.", "Chi trasmette la saggezza o l'impulso necessario?"],
+                ["Varco della Prima Soglia", "L'eroe entra definitivamente nel Mondo Straordinario.", "Qual è il punto di non ritorno?"],
+                ["Prove, Alleati, Nemici", "L'eroe impara le regole del nuovo mondo e stringe legami.", "Chi sta dalla sua parte e chi ne ostacola il cammino?"],
+                ["Avvicinamento alla Caverna Più Profonda", "Preparazione alla sfida principale nel cuore del pericolo.", "Come ci si prepara ad affrontare la paura più grande?"],
+                ["Ordata (Prova Centrale)", "La crisi centrale in cui l'eroe affronta la morte o la sua ombra.", "Quale sacrificio o trasformazione viscerale avviene qui?"],
+                ["La Ricompensa (Spada)", "L'eroe conquista l'oggetto, la conoscenza o la forza cercata.", "Cosa si ottiene dopo essere sopravvissuti all'oscurità?"],
+                ["Sulla Via del Ritorno", "La necessità di completare il viaggio e riportare il tesoro.", "Quale urgenza o minaccia residua spinge a tornare?"],
+                ["Resurrezione", "La prova finale purificatrice dove l'eroe applica quanto appreso.", "In che modo dimostra di essere un'altra persona?"],
+                ["Ritorno con l'Elisir", "Ritorno al mondo ordinario con una conquista da condividere.", "Qual è il dono portatore di guarigione o cambiamento?"]
+            ].map((h, i) => ({
                 id: `hero_${i+1}`,
                 deck: "hero",
                 type: "Viaggio dell'Eroe",
-                title: `${i+1}. ${title}`,
-                desc: "Fase mitologica dello sviluppo dell'eroe e della sua trasformazione interna.",
-                prompt: "In che stato psicologico ed emotivo si trova il personaggio durante questa fase?"
+                title: `${i+1}. ${h[0]}`,
+                desc: h[1],
+                prompt: h[2]
             })),
 
-            // INTÙITI PRIMARI (22)
-            ...Array.from({length: 22}, (_, i) => ({
+            // --- INTÙITI PRIMARI (22) ---
+            ...[
+                ["01 - Visione d'Insieme", "Guarda l'intero quadro.", "Stai osservando il dettaglio sacrificando l'insieme?"],
+                ["02 - L'Origine", "Torna all'idea primaria.", "Qual era l'intenzione pura prima delle sovrastrutture?"],
+                ["03 - La Trasformazione", "Accetta la mutazione.", "Cosa deve morire perché l'idea si evolva?"],
+                ["04 - Il Limite", "Usa il vincolo come risorsa.", "In che modo questo ostacolo definisce la forma?"],
+                ["05 - Il Ritmo", "Trova la cadenza dell'azione.", "Stai affrettando i tempi o rimandando la decisione?"],
+                ["06 - L'Equilibrio", "Pesa le componenti opposte.", "Cosa c'è di troppo e cosa manca?"],
+                ["07 - La Rottura", "Spezza lo schema consolidato.", "Qual è la scelta più sconvolgente che puoi fare?"],
+                ["08 - Il Vuoto", "Lascia spazio al non detto.", "Cosa succede se sottrai invece di aggiungere?"],
+                ["09 - La Tensione", "Alimenta il conflitto interno.", "Cosa tiene due forze in opposto contrasto?"],
+                ["10 - La Sintesi", "Unisci due elementi distanti.", "Quale cortocircuito crea l'unione di A e B?"],
+                ["11 - La Maschera", "Lavora sull'apparenza.", "Cosa si nasconde sotto ciò che viene mostrato?"],
+                ["12 - Il Flusso", "Aseconda l'evoluzione naturale.", "Dove sta andando la storia senza la tua forzatura?"],
+                ["13 - Il Centro", "Focalizzati sul cuore del tema.", "Qual è la vera domanda fondamentale di questa trama?"],
+                ["14 - L'Ombra", "Esplora il lato sgradevole.", "Qual è la verità spiacevole che stai evitando?"],
+                ["15 - Il Riflesso", "Usa specchi e parallelismi.", "In che modo l'ambiente riflette lo stato interno?"],
+                ["16 - La Svolta", "Inverti completamente la rotta.", "Se succedesse l'esatto contrario di ciò che ti aspetti?"],
+                ["17 - La Trasparenza", "Rendi tutto esplicito e grezzo.", "Cosa succede se elimini le metafore?"],
+                ["18 - L'Impronta", "Lascia un segno incisivo.", "Qual è l'elemento indimenticabile di questa scena?"],
+                ["19 - Il Nido", "Crea un rifugio di sicurezza.", "Dove riprendono fiato le forze in campo?"],
+                ["20 - La Scintilla", "Cerca l'intuizione istintiva.", "Qual è il primo pensiero irrazionale che ti viene?"],
+                ["21 - L'Orizzonte", "Guarda le conseguenze a lungo termine.", "Dove porta questo passaggio fra tre capitoli?"],
+                ["22 - Il Silenzio", "Pausa strategica e ascolto.", "Lascia che i fatti decantino."];
+            ].map((ip, i) => ({
                 id: `int_p_${i+1}`,
                 deck: "intuiti_p",
                 type: "Intùiti Primario",
-                title: `Primario ${['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII'][i]}`,
-                desc: "Modello di pensiero ad ampio respiro / Archetipo di riflessione profonda.",
-                imperative: "Cambia prospettiva strutturale.",
-                prompt: "Stai valutando il problema con preconcetti o rigidità?"
+                title: ip[0],
+                desc: "Archetipo e modello di pensiero per lo sblocco creativo.",
+                imperative: ip[1],
+                prompt: ip[2]
             })),
 
-            // INTÙITI SECONDARI (56)
-            ...['Fuoco (Energia)', 'Aria (Intelletto)', 'Acqua (Emozione)', 'Terra (Materia)'].flatMap((elem, eIdx) => 
-                Array.from({length: 14}, (_, i) => ({
-                    id: `int_s_${eIdx}_${i+1}`,
-                    deck: "intuiti_s",
-                    type: `Intùiti Secondario - ${elem}`,
-                    title: `${elem.split(' ')[0]} ${i+1}`,
-                    desc: `Stimolo puntuale focalizzato sull'elemento ${elem}.`,
-                    imperative: "Sblocca l'azione specifica.",
-                    prompt: "Quale dettaglio operativo di questo settore richiede attenzione immediata?"
+            // --- INTÙITI SECONDARI (56: 14 Fuoco, 14 Aria, 14 Acqua, 14 Terra) ---
+            ...[
+                // Fuoco
+                ...Array.from({length: 14}, (_, i) => ({
+                    elem: "Fuoco (Energia/Azione)",
+                    num: i+1,
+                    imp: ["Agisci d'impulso.", "Innesca una reazione.", "Aumenta la velocità.", "Brucia i ponti.", "Mostra passione.", "Genera scontro.", "Lancia una sfida.", "Distruggi un vincolo.", "Prendi l'iniziativa.", "Fai esplodere la scena.", "Usa la forza viscerale.", "Insegui il desiderio.", "Lancia il guanto.", "Consuma le riserve."][i],
+                    prm: "Come puoi portare immediatezza energetica e dinamismo immediato?"
+                })),
+                // Aria
+                ...Array.from({length: 14}, (_, i) => ({
+                    elem: "Aria (Intelletto/Visione)",
+                    num: i+1,
+                    imp: ["Analizza la struttura.", "Semplifica la logica.", "Cambia prospettiva teorica.", "Riformula il problema.", "Pianifica la strategia.", "Trova il paradosso.", "Scrivi con distacco.", "Usa l'ironia.", "Chiarezza concettuale.", "Decodifica il messaggio.", "Metti in discussione la tesi.", "Astrai dal contesto.", "Trova il nesso.", "Sviscera il senso."][i],
+                    prm: "Quale riflessione o riorganizzazione razionale chiarisce il quadro?"
+                })),
+                // Acqua
+                ...Array.from({length: 14}, (_, i) => ({
+                    elem: "Acqua (Emozione/Relazione)",
+                    num: i+1,
+                    imp: ["Ascolta l'empatia.", "Scava nella ferita.", "Svela la vulnerabilità.", "Lavora sulle sfumature.", "Crea intimità.", "Mostra la paura.", "Usa la nostalgia.", "Connetti i personaggi.", "Esaudisci un bisogno emotivo.", "Accetta il dolore.", "Esprimi il non detto.", "Sciogli la resistenza.", "Lasciati trasportare.", "Mostra l'inconscio."][i],
+                    prm: "Qual è l'impatto emotivo profondo che attraversa la situazione?"
+                })),
+                // Terra
+                ...Array.from({length: 14}, (_, i) => ({
+                    elem: "Terra (Materia/Pragmatismo)",
+                    num: i+1,
+                    imp: ["Rendi tutto concreto.", "Usa i cinque sensi.", "Radica la scena nei dettagli.", "Considera le risorse fisiche.", "Fissa regole chiare.", "Pensa alle conseguenze pratiche.", "Lavora sulla materia.", "Misura i costi.", "Consolida la base.", "Dai corpo ai personaggi.", "Costruisci il mondo fisico.", "Tocca con mano.", "Definisci i tempi reali.", "Lavora sulla resistenza."][i],
+                    prm: "Quale dettaglio sensoriale o vincolo materiale rende la storia credibile?"
                 }))
-            )
+            ].map((is, i) => ({
+                id: `int_s_${i+1}`,
+                deck: "intuiti_s",
+                type: `Intùiti ${is.elem.split(' ')[0]}`,
+                title: `${is.elem.split(' ')[0]} ${is.num}`,
+                desc: `Stimolo operativo incentrato su ${is.elem}.`,
+                imperative: is.imp,
+                prompt: is.prm
+            }))
         ];
 
         function getDeckFilter(val) {
@@ -318,7 +502,7 @@
             const count = parseInt(document.getElementById('countSelect').value, 10);
             const pool = [...getDeckFilter(deckType)];
 
-            // Fisher-Yates Shuffle
+            // Mescolamento Fisher-Yates
             for (let i = pool.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -326,16 +510,6 @@
 
             const selected = pool.slice(0, count);
             renderCards(selected);
-        }
-
-        function getBadgeClass(deck) {
-            switch(deck) {
-                case 'propp': return 'badge-propp';
-                case 'hero': return 'badge-hero';
-                case 'intuiti_p': return 'badge-intuiti-p';
-                case 'intuiti_s': return 'badge-intuiti-s';
-                default: return '';
-            }
         }
 
         function renderCards(cards) {
@@ -350,24 +524,25 @@
                 cardEl.className = 'card';
                 cardEl.onclick = () => cardEl.classList.toggle('flipped');
 
-                const badgeCls = getBadgeClass(card.deck);
+                const badgeClass = `badge-${card.deck}`;
 
                 cardEl.innerHTML = `
                     <div class="card-face card-front">
-                        <span class="badge ${badgeCls}">${card.type}</span>
-                        <h3>Clicca per rivelare</h3>
+                        <div class="icon">✨</div>
+                        <span class="badge ${badgeClass}">${card.type}</span>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Clicca per girare</p>
                     </div>
                     <div class="card-face card-back">
                         <div>
-                            <span class="badge ${badgeCls}">${card.type}</span>
+                            <span class="badge ${badgeClass}">${card.type}</span>
                             <div class="card-title">${card.title}</div>
                             <div class="card-body">
                                 <p>${card.desc}</p>
-                                ${card.imperative ? `<p><strong>Imperativo:</strong> ${card.imperative}</p>` : ''}
+                                ${card.imperative ? `<p class="imperative-text">"${card.imperative}"</p>` : ''}
                             </div>
                         </div>
                         <div class="prompt-box">
-                            <strong>Spunto:</strong> ${card.prompt}
+                            <strong>Prompt:</strong> ${card.prompt}
                         </div>
                     </div>
                 `;
@@ -381,7 +556,20 @@
             document.querySelectorAll('.card').forEach(c => c.classList.toggle('flipped'));
         }
 
-        // Prima estrazione automatica all'avvio
+        function copyNotes() {
+            const textarea = document.getElementById('notes');
+            textarea.select();
+            navigator.clipboard.writeText(textarea.value);
+            alert('Appunti copiati negli appunti!');
+        }
+
+        function clearNotes() {
+            if (confirm('Vuoi davvero cancellare il contenuto del taccuino?')) {
+                document.getElementById('notes').value = '';
+            }
+        }
+
+        // Estrazione iniziale
         drawCards();
     </script>
 </body>
